@@ -1,1 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
+@import "./variables";
+:root {
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: #eee;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 18px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  justify-content: center;
+  width: fit-content;
+
+  &.submit {
+    transition: background 300ms ease;
+    background-color: $primary-blue;
+
+    &:hover {
+      background-color: $primary-blue-dark;
+    }
+  }
+
+  &.lined {
+    transition: background 300ms ease;
+  }
+
+  &.outlined {
+    transition: background 300ms ease;
+
+    &:hover {
+    }
+  }
+
+  &.link {
+  }
+
+  &.alternative {
+    transition: background 300ms ease;
+
+    &:hover {
+    }
+  }
+}
