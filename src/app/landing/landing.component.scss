@@ -17,10 +17,16 @@
       text-decoration: none;
       color: white;
       font-size: 20px;
+      display: flex;
+      align-items: center;
 
       span {
         font-size: 24px;
         color: $primary-blue;
+      }
+
+      svg {
+        margin-left: 6px;
       }
     }
 
