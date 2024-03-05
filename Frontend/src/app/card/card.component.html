@@ -1,16 +1,16 @@
 <li class="card">
-  <img
-    src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.mmohuts.com%2Fwp-content%2Fuploads%2F2015%2F03%2FSmite_604x423.jpg&f=1&nofb=1&ipt=470de3e6f3861154e8aa6e665632ec4fc842fe40561f123c6582636b8664b477&ipo=images"
-    alt="Website Image"
-  />
+  <img src="{{ image_link }}" alt="Website Image" />
 
   <div class="card_info">
-    <h4>Smite</h4>
+    <h4>{{ website_name }}</h4>
 
     <div>
-      <p>www.smite.com</p>
+      <p>{{ website_url }}</p>
 
-      <p>2 Passwords</p>
+      <p>
+        {{ password_quantity }}
+        {{ password_quantity == 1 ? "Password" : "Passwords" }}
+      </p>
     </div>
 
     <div class="card_buttons">
