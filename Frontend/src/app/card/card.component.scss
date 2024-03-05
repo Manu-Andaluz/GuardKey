@@ -1,0 +1,36 @@
+@import "../../variables";
+
+.card {
+  display: grid;
+  width: 360px;
+  border: 1px solid $primary-border;
+  border-radius: 4px;
+
+  img {
+    width: 360px;
+    height: auto;
+    max-width: 100%;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .card_info {
+    display: grid;
+    margin: 14px 0 16px 0;
+    gap: 20px;
+    padding-inline: 14px;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .card_buttons {
+    display: flex;
+    gap: 4px;
+
+    button {
+      font-size: 14px;
+    }
+  }
+}

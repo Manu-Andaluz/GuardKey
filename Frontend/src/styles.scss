@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "./variables";
+
 :root {
   color-scheme: light dark;
 }
@@ -36,6 +37,7 @@
   }
 
   &.lined {
+    border: 1px solid $primary-border;
     transition: background 300ms ease;
   }
 
