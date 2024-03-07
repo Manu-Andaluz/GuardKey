@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [NavbarComponent, RouterLink],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
-export class LoginComponent {
-
-}
+export class LoginComponent {}
