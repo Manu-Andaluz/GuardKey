@@ -1,0 +1,33 @@
+<section class="auth_container">
+  <h1>Login</h1>
+
+  <form class="auth_form_container" id="login-up-form">
+    <div>
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          type="text"
+          name="email"
+          id="email"
+          required
+          onChange="{changeHandler}"
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          autoComplete=""
+          onChange="{changeHandler}"
+        />
+      </div>
+    </div>
+  </form>
+
+  <button onClick="{handleOnClick}" class="button submit">Login</button>
+
+  <div class="without-account">Create an account</div>
+</section>
