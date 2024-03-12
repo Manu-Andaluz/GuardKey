@@ -1,1 +1,1 @@
-Password Manager made with Angular, Python and MySQL
+Password Manager made with Angular, Python and MySQL.
