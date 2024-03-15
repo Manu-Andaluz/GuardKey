@@ -40,15 +40,12 @@ class Secrets(models.Model):
 
     def set_masterkey(self,password):
         self.masterkey_hash = hashlib.sha256(password.encode()).hexdigest()
-        print("hashed password", self.masterkey_hash)
         self.device_secret = self.generate_device_secret()
-        print("device secret", self.device_secret)
         self.save()
 
     def validate_master_password(self,password):
         hashed_mp = hashlib.sha256(password.encode()).hexdigest()
         result = Secrets.objects.all()
-        print("result",result[0].masterkey_hash)
         if hashed_mp == result[0].masterkey_hash:
             return result[0]
         else :
@@ -57,6 +54,7 @@ class Secrets(models.Model):
 class Entries(models.Model):
     site_name = models.TextField(null=False)
     site_url = models.TextField(null=True)
+    site_image = models.TextField(null=True)
     email = models.TextField(null=True)
     username = models.TextField(null=True)
     password = models.TextField(null=False)
@@ -67,22 +65,23 @@ class Entries(models.Model):
         key = PBKDF2(password, salt, 32, count=1000000, hmac_hash_module=SHA512)
         return key
 
-    def add_entry(self, mp, ds, sitename, siteurl, email, username, password):
+    def add_entry(self, mp, ds, sitename, siteurl, siteimage, email, username, password):
         mk = self.compute_master_key(mp,ds)
         encrypted_mk = encrypt(key=mk, source=password,keyType="bytes")
 
         self.site_name = sitename
         self.site_url = siteurl
+        self.site_image = siteimage
         self.email = email
         self.username = username
         self.password = encrypted_mk
         self.save()
 
     def retrieve_entries(self, mp, ds, search, decrypt_password=False):
-        if search == "":
+        if search == "" or search == None:
             all_data = Entries.objects.all()
             print("all_data", all_data)
-            return [all_data]
+            return all_data
         else:
             data = Entries.objects.get(site_name=search)            
             print("data",data)

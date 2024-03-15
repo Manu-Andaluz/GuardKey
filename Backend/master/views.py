@@ -13,9 +13,9 @@ def create_masterkey(request):
         user_masterkey = body_data.get("master_password")
         password_manager = Secrets()
         password_manager.set_masterkey(user_masterkey)
-        return JsonResponse({'message': 'Added to the database !!'})
+        return JsonResponse({'message': 'Master password added to the database !!'})
     else:
-        return JsonResponse({'message': 'ERROR !!'})
+        return JsonResponse({'message': 'Error !!'})
 
 @api_view(['POST'])
 def create_entry(request):
@@ -26,16 +26,17 @@ def create_entry(request):
         if validate_password:
             site_name = request_body.get("site_name")
             site_url = request_body.get("site_url")
+            site_image = request_body.get("site_image")
             email = request_body.get("email")
             username = request_body.get("username")
             password = request_body.get("password")
             
-            Entries().add_entry(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, sitename=site_name, siteurl=site_url, email=email,username=username,password=password)
-            return JsonResponse({'message': "very good"})
+            Entries().add_entry(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, sitename=site_name, siteurl=site_url, siteimage=site_image, email=email,username=username,password=password)
+            return JsonResponse({'message': "Entry added successfully !!"})
         else:
-            return JsonResponse({'body': "The master password is incorrect !! Try again !!"})
+            return JsonResponse({'message': "The master password is incorrect !! Try again !!"})
     else:
-        return JsonResponse({'message': 'ERROR !!'})
+        return JsonResponse({'message': 'Error !!'})
 
 @api_view(['POST'])
 def extract_entries(request):
@@ -47,11 +48,16 @@ def extract_entries(request):
             search = request_body.get("search")
             decrypt_password = request_body.get("decrypt_password")
             result = Entries().retrieve_entries(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, search=search, decrypt_password=decrypt_password)
-            serialized_result = EntriesSerializer(result).data
-            return JsonResponse({'message': serialized_result})
+
+            if request_body.get("search"):
+                serialized_result = EntriesSerializer(result).data
+            else:
+                serialized_result = EntriesSerializer(result, many=True).data
+
+            return JsonResponse({'data': serialized_result})
     
     else:
-        return JsonResponse({'message': 'ERROR !!'})
+        return JsonResponse({'message': 'Error !!'})
      
 @api_view(['GET'])
 def generate_password(request):
@@ -60,10 +66,10 @@ def generate_password(request):
 
     if length:
         password = Secrets().generate_random_password(length=length)
-        return JsonResponse({'password': password})
+        return JsonResponse({'data': password})
 
     else:
-        return JsonResponse({'message': "Enter the length for the password"})
+        return JsonResponse({'message': "The length of the password is required !!"})
     
 
 #@api_view(['POST'])
