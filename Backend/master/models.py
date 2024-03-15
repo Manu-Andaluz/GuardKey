@@ -2,63 +2,133 @@ import hashlib
 from django.db import models
 from cryptography.fernet import Fernet
 from django.db import models
+import random
+import string
+from Crypto.Protocol.KDF import PBKDF2
+from Crypto.Hash import SHA512
+from Crypto.Random import get_random_bytes
+from .utils import encrypt,decrypt
 
 # Create your models here.
-class PasswordManager(models.Model):
-    master_password_hash = models.CharField(max_length=1000)
-    password_file = models.CharField(max_length=1000)
-    password_dict = models.JSONField(default=dict)
+class Secrets(models.Model):
+    masterkey_hash = models.TextField(null=False)
+    device_secret = models.TextField(null=False)
 
-    def create_key(self, path):
-        self.key = Fernet.generate_key()
-        with open(path, 'wb') as key_file:  # Open the file at the given path
-            key_file.write(self.key)        # Write the generated key to the file
-    
-    def set_master_password(self, master_password):
-        # Store the hashed master password securely
-        if not PasswordManager.objects.exists():
-            # Store the hashed master password securely
-            self.master_password_hash = hashlib.sha256(master_password.encode()).hexdigest()
-            self.save()  # Save the instance to the database
-            return True
-        else:
+    def generate_device_secret(self, length=10):
+        return ''.join(random.choices(string.ascii_uppercase + string.digits, k = length))
+
+    def set_masterkey(self,password):
+        self.masterkey_hash = hashlib.sha256(password.encode()).hexdigest()
+        print("hashed password", self.masterkey_hash)
+        self.device_secret = self.generate_device_secret()
+        print("device secret", self.device_secret)
+        self.save()
+
+    def validate_master_password(self,password):
+        hashed_mp = hashlib.sha256(password.encode()).hexdigest()
+        result = Secrets.objects.all()
+        print("result",result[0].masterkey_hash)
+        if hashed_mp == result[0].masterkey_hash:
+            return result[0]
+        else :
             return False
 
-    def verify_master_password(self, entered_password):
-        # Verify the entered master password against the stored hash
-        entered_password_hash = hashlib.sha256(entered_password.encode()).hexdigest()
-        curent_password = PasswordManager.objects.all()
-        # print(entered_password_hash, self.master_password_hash)
-        return curent_password[0].master_password_hash == entered_password_hash
+class Entries(models.Model):
+    site_name = models.TextField(null=False)
+    site_url = models.TextField(null=True)
+    email = models.TextField(null=True)
+    username = models.TextField(null=True)
+    password = models.TextField(null=False)
 
-    def derive_key_from_master_password(self):
-        # Derive the encryption key from the master password
-        return hashlib.sha256(self.master_password_hash.encode()).digest()
+    def compute_master_key(self,mp,ds):
+        password = mp.encode()
+        salt = ds.encode()
+        key = PBKDF2(password, salt, 32, count=1000000, hmac_hash_module=SHA512)
+        return key
 
-    def create_password_file(self,path,initial_values=None):
-        self.password_file = path
+    def add_entry(self, mp, ds, sitename, siteurl, email, username, password):
+        mk = self.compute_master_key(mp,ds)
+        encrypted_mk = encrypt(key=mk, source=password,keyType="bytes")
 
-        if initial_values is not None:
-            for key, value in initial_values.items():
-                self.add_password(key,value)
+        self.site_name = sitename
+        self.site_url = siteurl
+        self.email = email
+        self.username = username
+        self.password = encrypted_mk
+        self.save()
+
+    def retrieve_entries(self, mp, ds, search, decrypt_password=False):
+        if search == "":
+            all_data = Entries.objects.all()
+            print("all_data", all_data)
+            return [all_data]
+        else:
+            data = Entries.objects.get(site_name=search)            
+            print("data",data)
+            if decrypt_password:
+                mk = self.compute_master_key(mp, ds)
+                decrypted_mk = decrypt(key=mk, source=data.password,keyType="bytes")
+                data.password = decrypted_mk
+                return data
+
+            return data
+
+
+
+#    def create_key(self, path):
+        #self.key = Fernet.generate_key()
+        #with open(path, 'wb') as key_file:  # Open the file at the given path
+            #key_file.write(self.key)        # Write the generated key to the file
+    
+    #def set_master_password(self, master_password):
+        ## Store the hashed master password securely
+        #if not PasswordManager.objects.exists():
+            ## Store the hashed master password securely
+            #self.master_password_hash = hashlib.sha256(master_password.encode()).hexdigest()
+            #self.save()  # Save the instance to the database
+            #return True
+        #else:
+            #return False
+
+    #def verify_master_password(self, entered_password):
+        ## Verify the entered master password against the stored hash
+        #entered_password_hash = hashlib.sha256(entered_password.encode()).hexdigest()
+        #curent_password = PasswordManager.objects.all()
+        ## print(entered_password_hash, self.master_password_hash)
+        #return curent_password[0].master_password_hash == entered_password_hash
+
+    #def derive_key_from_master_password(self):
+        ## Derive the encryption key from the master password
+        #return hashlib.sha256(self.master_password_hash.encode()).digest()
+
+    #def add_new_password(self, password, site):
+        #curent_password = PasswordManager.objects.all()
+        #key = hashlib.sha256(curent_password[0].master_password_hash.encode()).digest() #curent_password[0].master_password_hash
+        #print(key, "key")
+##    def create_password_file(self,path,initial_values=None):
+        #self.password_file = path
+
+        #if initial_values is not None:
+            #for key, value in initial_values.items():
+                #self.add_password(key,value)
                 
-    def load_password_file(self,path):
-        self.password_file = path
-        key = self.derive_key_from_master_password()
+    #def load_password_file(self,path):
+        #self.password_file = path
+        #key = self.derive_key_from_master_password()
 
-        with open(path, "r") as f:
-            for line in f:
-                site, encrypted = line.split(" : ")
-                self.password_dict[site] : Fernet(key).decrypt(encrypted.encode()).decode()
+        #with open(path, "r") as f:
+            #for line in f:
+                #site, encrypted = line.split(" : ")
+                #self.password_dict[site] : Fernet(key).decrypt(encrypted.encode()).decode()
 
-    def add_password(self,site,password):
-        self.password_dict[site] = password
-        key = self.derive_key_from_master_password()
+    #def add_password(self,site,password):
+        #self.password_dict[site] = password
+        #key = self.derive_key_from_master_password()
         
-        if self.password_file is not None:
-            with open(self.password_file, "a+") as f:
-                encypted = Fernet(key).encrypt(password.encode())
-                f.write(site + " : " + encypted.decode() + "\n")
+        #if self.password_file is not None:
+            #with open(self.password_file, "a+") as f:
+                #encypted = Fernet(key).encrypt(password.encode())
+                #f.write(site + " : " + encypted.decode() + "\n")
                 
-    def get_password(self,site):
-        return self.password_dict[site]
+    #def get_password(self,site):
+        #return self.password_dict[site]

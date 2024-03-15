@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import PasswordManager
+from .models import Secrets, Entries
 # Register your models here.
 
-admin.site.register(PasswordManager)
+admin.site.register(Secrets)
+admin.site.register(Entries)
