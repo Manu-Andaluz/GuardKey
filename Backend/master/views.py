@@ -53,8 +53,17 @@ def extract_entries(request):
     else:
         return JsonResponse({'message': 'ERROR !!'})
      
+@api_view(['GET'])
+def generate_password(request):
+    request_body = json.loads(request.body)
+    length = request_body.get("password_length")
 
+    if length:
+        password = Secrets().generate_random_password(length=length)
+        return JsonResponse({'password': password})
 
+    else:
+        return JsonResponse({'message': "Enter the length for the password"})
     
 
 #@api_view(['POST'])

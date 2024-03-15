@@ -1,6 +1,5 @@
 import hashlib
 from django.db import models
-from cryptography.fernet import Fernet
 from django.db import models
 import random
 import string
@@ -13,6 +12,28 @@ from .utils import encrypt,decrypt
 class Secrets(models.Model):
     masterkey_hash = models.TextField(null=False)
     device_secret = models.TextField(null=False)
+
+    def generate_random_password(self,length=10):
+        # Define character sets
+        uppercase_letters = string.ascii_uppercase
+        digits = string.digits
+        special_characters = string.punctuation
+
+        # Generate password with at least one uppercase letter, one digit, and one special character
+        password = random.choice(uppercase_letters)  # Ensure at least one uppercase letter
+        password += random.choice(digits)  # Ensure at least one digit
+        password += random.choice(special_characters)  # Ensure at least one special character
+
+        # Fill the remaining characters with a mix of uppercase letters, digits, and special characters
+        remaining_length = length - 3  # Subtract 3 for the already chosen characters
+        password += ''.join(random.choices(uppercase_letters + digits + special_characters, k=remaining_length))
+
+        # Shuffle the password to randomize the order of characters
+        password_list = list(password)
+        random.shuffle(password_list)
+        password = ''.join(password_list)
+
+        return password
 
     def generate_device_secret(self, length=10):
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k = length))
