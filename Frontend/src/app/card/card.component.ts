@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -12,4 +12,9 @@ export class CardComponent {
   @Input() website_name: string = '';
   @Input() website_url: string = '';
   @Input() password_quantity: number = 1;
+  @Output() onClick: EventEmitter<any> = new EventEmitter();
+
+  handleClick(): void {
+    this.onClick.emit();
+  }
 }
