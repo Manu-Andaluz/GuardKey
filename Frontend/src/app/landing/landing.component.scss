@@ -44,17 +44,18 @@
   position: fixed;
   top: 0;
   bottom: 0;
+  border-radius: 16px;
 
-  img {
-    display: flex;
-    width: 100px;
-    max-width: 100%;
-    height: auto;
+  svg {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
   }
 
-  ul {
-    display: grid;
-    gap: 10px;
+  h2 {
+    margin-top: 10px;
+    font-size: 24px;
   }
 }
 
@@ -89,22 +90,12 @@
   background: none;
   background-color: $primary-dark;
   padding: 20px;
-  border-radius: 4px;
 }
 
 .dialog:not([open]) {
   pointer-events: none;
   opacity: 0;
 }
-
-.container {
-  background-color: whitesmoke;
-  padding: 1.5rem;
-  border-radius: 28px;
-  width: 500px;
-  border: 1px solid whitesmoke;
-}
-
 .close[open] {
   animation-name: dialogOut;
   animation-duration: 500ms;

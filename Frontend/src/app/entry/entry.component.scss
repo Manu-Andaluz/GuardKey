@@ -1,0 +1,44 @@
+.entry {
+  display: grid;
+  place-content: center;
+  height: calc(100vh - 75px);
+
+  div {
+    width: 1200px;
+    max-width: 100%;
+
+    img {
+      width: min-content;
+      max-width: 100%;
+      height: auto;
+    }
+
+    h1 {
+      margin: 18px 0 16px 0;
+      font-size: 32px;
+    }
+
+    ul {
+      display: grid;
+      align-items: center;
+      gap: 20px;
+
+      li {
+        display: flex;
+        gap: 10px;
+        font-size: 18px;
+        font-weight: 400;
+        align-items: center;
+
+        span {
+          font-size: 18px;
+          font-weight: 600;
+        }
+
+        svg {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

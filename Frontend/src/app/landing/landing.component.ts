@@ -43,4 +43,19 @@ export class LandingComponent {
     const modalElement = this.cardModal.nativeElement as HTMLDialogElement;
     modalElement.open = true;
   };
+
+  closeModal = (): void => {
+    const modalElement = this.cardModal.nativeElement as HTMLDialogElement;
+    modalElement.classList.add('close');
+    const animationEndHandler = (event: any) => {
+      modalElement.close();
+      modalElement.classList.remove('close');
+      modalElement.removeEventListener('animationend', animationEndHandler);
+    };
+    modalElement.addEventListener('animationend', animationEndHandler);
+
+    setTimeout(() => {
+      modalElement.classList.add('open');
+    });
+  };
 }

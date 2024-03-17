@@ -48,8 +48,11 @@
     display: flex;
     gap: 4px;
 
-    button {
+    button,
+    a {
       font-size: 14px;
+      text-decoration: none;
+      font-weight: 400;
     }
   }
 }

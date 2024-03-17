@@ -30,15 +30,7 @@
 </section>
 
 <section class="cards_container">
-  <dialog #card_modal class="dialog">
-    <img src="{{ card_modal_entry?.site_image }}" alt="card_image" />
-    <h2>{{ card_modal_entry?.site_name }}</h2>
-    <ul>
-      <li><span>Site link: </span>{{ card_modal_entry?.site_url }}</li>
-      <li><span>Email: </span>{{ card_modal_entry?.email }}</li>
-      <li><span>Password: </span>{{ card_modal_entry?.password }}</li>
-    </ul>
-  </dialog>
+  <dialog #card_modal class="dialog"></dialog>
 
   <ul>
     <app-card
@@ -47,7 +39,6 @@
       website_name="{{ entry.site_name }}"
       [password_quantity]="1"
       image_link="{{ entry.site_image }}"
-      (onClick)="openModal(entry)"
     />
   </ul>
 </section>
