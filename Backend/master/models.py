@@ -80,11 +80,9 @@ class Entries(models.Model):
     def retrieve_entries(self, mp, ds, search, decrypt_password=False):
         if search == "" or search == None:
             all_data = Entries.objects.all()
-            print("all_data", all_data)
             return all_data
         else:
             data = Entries.objects.get(site_name=search)            
-            print("data",data)
             if decrypt_password:
                 mk = self.compute_master_key(mp, ds)
                 decrypted_mk = decrypt(key=mk, source=data.password,keyType="bytes")
@@ -92,6 +90,15 @@ class Entries(models.Model):
                 return data
 
             return data
+    
+    def delete_entry(self, search):
+        data = Entries.objects.get(site_name=search)             
+        print('data: ', data)
+        copied_data = data
+        data.delete()
+        return copied_data
+
+        
 
 
 

@@ -70,6 +70,19 @@ def generate_password(request):
 
     else:
         return JsonResponse({'message': "The length of the password is required !!"})
+
+@api_view(['DELETE'])
+def delete_entry(request):
+    request_body = json.loads(request.body) 
+    validate_password = Secrets().validate_master_password(request_body.get("master_password"))
+
+    if validate_password:
+        response = Entries().delete_entry(request_body.get("search"))
+        serialized_result = EntriesSerializer(response).data
+        return JsonResponse({'data': serialized_result})
+
+
+    
     
 
 #@api_view(['POST'])
