@@ -88,7 +88,7 @@ class Entries(models.Model):
             if decrypt_password:
                 mk = self.compute_master_key(mp, ds)
                 decrypted_mk = decrypt(key=mk, source=data.password,keyType="bytes")
-                data.password = decrypted_mk
+                data.password = decrypted_mk.decode()
                 return data
 
             return data
