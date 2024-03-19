@@ -17,3 +17,10 @@ type NewEntry = {
   username: string;
   password: string;
 };
+
+type FormErrors = {
+  master_password: string | null;
+  site_name: string | null;
+  email: string | null;
+  password: string | null;
+};
