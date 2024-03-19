@@ -4,16 +4,16 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class PostService {
-  private path = 'http://localhost:8000/manager/retrieve-entries/';
+export class AddEntryService {
+  private path = 'http://localhost:8000/manager/create-entry/';
   private headers = new HttpHeaders({
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json', // Example header
   });
 
   constructor(private httpClient: HttpClient) {}
 
-  examplePost(body: { master_password: string; decrypt_password: boolean }) {
-    return this.httpClient.post<{ data: Entry[] }>(this.path, body, {
+  postRequest(body: NewEntry) {
+    return this.httpClient.post<{ data: Entry }>(this.path, body, {
       headers: this.headers,
     });
   }
