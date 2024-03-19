@@ -1,17 +1,19 @@
 @import "../../variables";
 
-.langing_nav {
-  max-width: 1400px;
+.landing_nav {
   margin: auto;
   padding-inline: 24px;
   height: 70px;
   align-items: center;
-  display: grid;
   border-bottom: 1px solid $primary-border;
 
   nav {
     display: flex;
     justify-content: space-between;
+    max-width: 1300px;
+    margin: auto;
+    align-items: center;
+    height: 100%;
 
     a {
       text-decoration: none;

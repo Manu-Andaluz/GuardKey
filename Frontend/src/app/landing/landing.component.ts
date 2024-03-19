@@ -2,14 +2,14 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CardComponent } from '../card/card.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { PostService } from '../services/post.service';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CardComponent, NavbarComponent, CommonModule],
+  imports: [CardComponent, NavbarComponent, CommonModule, RouterLink],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
 })
