@@ -4,6 +4,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { PostService } from '../services/post.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -13,7 +14,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './landing.component.scss',
 })
 export class LandingComponent {
-  constructor(private service: PostService) {}
+  constructor(private service: PostService, private route: ActivatedRoute) {}
   entries: Entry[] = [];
   card_modal_entry?: Entry;
   @ViewChild('card_modal') cardModal!: ElementRef;

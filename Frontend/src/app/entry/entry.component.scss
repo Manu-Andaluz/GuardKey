@@ -1,16 +1,17 @@
 .entry {
   display: grid;
   place-content: center;
-  height: calc(100vh - 75px);
+  min-height: calc(100vh - 75px);
+  padding: 40px;
 
   div {
     width: 1200px;
     max-width: 100%;
 
     img {
-      width: min-content;
+      height: 250px;
+      width: auto;
       max-width: 100%;
-      height: auto;
     }
 
     h1 {

@@ -1,24 +1,22 @@
 <app-navbar />
 <section class="entry">
   <div>
-    <img
-      src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnpm-assets.fiverrcdn.com%2Fassets%2Flayout%2Ffiverr-og-logo.99c4dbf.png&f=1&nofb=1&ipt=0723823f5f00a35d61cb58300d13709c20ea8c1d1b43dcb6a236c55ffaabb126&ipo=images"
-      alt="Site Image"
-    />
+    <img src="{{ entry?.site_image }}" alt="Site Image" />
 
-    <h1>Fiverr</h1>
+    <h1>{{ entry?.site_name }}</h1>
 
     <ul>
-      <li><span>Site url: </span>www.fiverr.com</li>
-      <li><span>Email: </span> manupeandaluz&#64;gmail.com</li>
+      <li><span>Site url: </span>{{ entry?.site_url }}</li>
+      <li><span>Email: </span> {{ entry?.email }}</li>
       <li>
-        <span>Password: </span> asdasd912812840912912=-120=-odkasjdjsalkd
+        <span>Password: </span> {{ entry?.password }}
         <svg
           width="24"
           height="24"
           viewBox="0 0 24 24"
           fill="#000"
           xmlns="http://www.w3.org/2000/svg"
+          (click)="getEntry({ decrypt: true })"
         >
           <path
             d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z"
