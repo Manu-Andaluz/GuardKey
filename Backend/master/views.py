@@ -80,10 +80,6 @@ def delete_entry(request):
         serialized_result = EntriesSerializer(response).data
         return JsonResponse({'data': serialized_result})
 
-
-    
-    
-
 #@api_view(['POST'])
 #def generate_key(request):
 

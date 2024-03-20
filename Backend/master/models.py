@@ -7,9 +7,11 @@ from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Hash import SHA512
 from Crypto.Random import get_random_bytes
 from .utils import encrypt,decrypt
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Secrets(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     masterkey_hash = models.TextField(null=False)
     device_secret = models.TextField(null=False)
 
