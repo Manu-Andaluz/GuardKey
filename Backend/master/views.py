@@ -73,11 +73,10 @@ def generate_password(request):
 
 @api_view(['DELETE'])
 def delete_entry(request):
-    request_body = json.loads(request.body) 
-    validate_password = Secrets().validate_master_password(request_body.get("master_password"))
+    validate_password = Secrets().validate_master_password(request.headers.get("Master-Password"))
 
     if validate_password:
-        response = Entries().delete_entry(request_body.get("search"))
+        response = Entries().delete_entry(request.GET["search"])
         serialized_result = EntriesSerializer(response).data
         return JsonResponse({'data': serialized_result})
 

@@ -35,7 +35,9 @@
         </svg>
       </button>
       <a routerLink="/entry/{{ website_name }}" class="button lined">Edit</a>
-      <button class="button lined">Delete</button>
+      <button (click)="deleteEntry(website_name)" class="button lined">
+        Delete
+      </button>
     </div>
   </div>
 </li>
