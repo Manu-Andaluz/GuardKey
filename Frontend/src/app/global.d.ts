@@ -24,3 +24,13 @@ type FormErrors = {
   email: string | null;
   password: string | null;
 };
+
+type User = {
+  token: string;
+  user: {
+    id: number;
+    username: string;
+    password: string;
+    email: string;
+  };
+};

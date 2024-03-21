@@ -2,23 +2,28 @@
 <section class="login_container">
   <h1>Sign in</h1>
 
-  <form action="">
+  <form action="" id="login_form">
     <div>
-      <label for="email">Email*</label>
-      <input placeholder="Email" name="email" id="email" type="email" />
+      <label for="username">Username*</label>
+      <input
+        placeholder="EltonJohn"
+        name="username"
+        id="username"
+        type="text"
+      />
     </div>
 
     <div>
-      <label for="master_password">Master Password*</label>
+      <label for="password">Password*</label>
       <input
         placeholder="********"
-        name="master_password"
-        id="master_password"
+        name="password"
+        id="password"
         type="password"
       />
     </div>
 
-    <button class="button submit">Continue</button>
+    <button (click)="login($event)" class="button submit">Continue</button>
   </form>
 
   <a routerLink="/register" class="button outlined">Create an account</a>

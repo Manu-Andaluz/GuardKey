@@ -39,7 +39,8 @@
     </a>
 
     <ul>
-      <li><a routerLink="/login">Sign In</a></li>
+      <li *ngIf="isUser"><a (click)="logout()">Logout</a></li>
+      <li *ngIf="!isUser"><a routerLink="/login">Sign In</a></li>
     </ul>
   </nav>
 </header>
