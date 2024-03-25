@@ -24,7 +24,7 @@ export class LoginComponent {
         (response: User) => {
           console.log(response);
           localStorage.setItem('guardkey_session_token', response.token);
-          this.router.navigateByUrl('/');
+          // this.router.navigateByUrl('/');
         },
         (error: any) => {
           console.log(error);

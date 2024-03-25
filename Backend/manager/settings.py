@@ -131,4 +131,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_HEADERS = ["Master-Password", "Content-Type"]
 
 CORS_ALLOW_ALL_ORIGINS = True
-

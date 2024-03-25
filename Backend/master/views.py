@@ -12,7 +12,8 @@ def create_masterkey(request):
         body_data = json.loads(body_unicode)
         user_masterkey = body_data.get("master_password")
         password_manager = Secrets()
-        password_manager.set_masterkey(user_masterkey)
+        print(body_data.get("user_id"))
+        password_manager.set_masterkey(user_masterkey, body_data.get("user_id"))
         return JsonResponse({'message': 'Master password added to the database !!'})
     else:
         return JsonResponse({'message': 'Error !!'})
@@ -30,8 +31,9 @@ def create_entry(request):
             email = request_body.get("email")
             username = request_body.get("username")
             password = request_body.get("password")
+            user_id = request_body.get("user_id")
             
-            Entries().add_entry(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, sitename=site_name, siteurl=site_url, siteimage=site_image, email=email,username=username,password=password)
+            Entries().add_entry(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, sitename=site_name, siteurl=site_url, siteimage=site_image, email=email,username=username,password=password, user_id=user_id)
             return JsonResponse({'message': "Entry added successfully !!"})
         else:
             return JsonResponse({'message': "The master password is incorrect !! Try again !!"})
@@ -47,12 +49,10 @@ def extract_entries(request):
         if validate_password:
             search = request_body.get("search")
             decrypt_password = request_body.get("decrypt_password")
-            result = Entries().retrieve_entries(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, search=search, decrypt_password=decrypt_password)
+            user_id = request_body.get("user_id")
+            result = Entries().retrieve_entries(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, search=search, decrypt_password=decrypt_password, user_id=user_id)
 
-            if request_body.get("search"):
-                serialized_result = EntriesSerializer(result).data
-            else:
-                serialized_result = EntriesSerializer(result, many=True).data
+            serialized_result = EntriesSerializer(result, many=True).data
 
             return JsonResponse({'data': serialized_result})
     

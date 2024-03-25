@@ -7,11 +7,12 @@ from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Hash import SHA512
 from Crypto.Random import get_random_bytes
 from .utils import encrypt,decrypt
+from django.conf import settings
 from django.contrib.auth.models import User
 
 # Create your models here.
 class Secrets(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,null=True,on_delete=models.CASCADE, related_name="user_profile")
     masterkey_hash = models.TextField(null=False)
     device_secret = models.TextField(null=False)
 
@@ -40,10 +41,20 @@ class Secrets(models.Model):
     def generate_device_secret(self, length=10):
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k = length))
 
-    def set_masterkey(self,password):
+    def set_masterkey(self,password, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+            print(user)
+        except User.DoesNotExist:
+            # Handle the case where user does not exist
+            print('---------------------', user_id)
+            return False
+        
+        self.user = user
         self.masterkey_hash = hashlib.sha256(password.encode()).hexdigest()
         self.device_secret = self.generate_device_secret()
         self.save()
+        return True
 
     def validate_master_password(self,password):
         hashed_mp = hashlib.sha256(password.encode()).hexdigest()
@@ -54,6 +65,7 @@ class Secrets(models.Model):
             return False
 
 class Entries(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='user_related', null=True)
     site_name = models.TextField(null=False)
     site_url = models.TextField(null=True)
     site_image = models.TextField(null=True)
@@ -67,7 +79,15 @@ class Entries(models.Model):
         key = PBKDF2(password, salt, 32, count=1000000, hmac_hash_module=SHA512)
         return key
 
-    def add_entry(self, mp, ds, sitename, siteurl, siteimage, email, username, password):
+    def add_entry(self, mp, ds, sitename, siteurl, siteimage, email, username, password, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+            print(user)
+        except User.DoesNotExist:
+            # Handle the case where user does not exist
+            print('---------------------', user_id)
+            return False
+
         mk = self.compute_master_key(mp,ds)
         encrypted_mk = encrypt(key=mk, source=password,keyType="bytes")
 
@@ -77,21 +97,23 @@ class Entries(models.Model):
         self.email = email
         self.username = username
         self.password = encrypted_mk
+        self.user = user
         self.save()
 
-    def retrieve_entries(self, mp, ds, search, decrypt_password=False):
+    def retrieve_entries(self, mp, ds, search, user_id, decrypt_password=False):
+        user = User.objects.get(id=user_id)
         if search == "" or search == None:
-            all_data = Entries.objects.all()
+            all_data = Entries.objects.filter(user=user)
             return all_data
         else:
-            data = Entries.objects.get(site_name=search)            
+            data = Entries.objects.get(user=user,site_name=search)            
             if decrypt_password:
                 mk = self.compute_master_key(mp, ds)
                 decrypted_mk = decrypt(key=mk, source=data.password,keyType="bytes")
                 data.password = decrypted_mk.decode()
-                return data
+                return [data]
 
-            return data
+            return [data]
     
     def delete_entry(self, search):
         data = Entries.objects.get(site_name=search)             
