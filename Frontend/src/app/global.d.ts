@@ -16,6 +16,7 @@ type NewEntry = {
   email: string;
   username: string;
   password: string;
+  user_id: string;
 };
 
 type FormErrors = {

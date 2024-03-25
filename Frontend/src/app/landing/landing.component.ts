@@ -5,6 +5,7 @@ import { PostService } from '../services/post.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-landing',
@@ -20,10 +21,14 @@ export class LandingComponent {
   @ViewChild('card_modal') cardModal!: ElementRef;
 
   testPost() {
+    const token = localStorage.getItem('guardkey_session_token') as string;
+    const decodedToken = jwtDecode(token) as any;
+
     this.service
       .examplePost({
-        master_password: 'masteradmin123!',
+        master_password: 'TheWitcher0310*',
         decrypt_password: false,
+        user_id: decodedToken.user_id,
       })
       .subscribe(
         (response: { data: Entry[] }) => {

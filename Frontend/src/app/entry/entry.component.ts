@@ -33,7 +33,7 @@ export class EntryComponent {
         search: search,
       })
       .subscribe(
-        (response: { data: Entry }) => {
+        (response: any) => {
           this.entry = response.data;
         },
         (error: any) => {

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { AddEntryService } from '../services/AddEntry/add-entry.service';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-create-password',
@@ -60,8 +61,12 @@ export class CreatePasswordComponent {
       formData[input.id] = input.value;
     });
 
+    const token = localStorage.getItem('guardkey_session_token') as string;
+    const decodedToken = jwtDecode(token) as any;
+    formData.user_id = decodedToken.user_id;
+
     this.service.postRequest(formData).subscribe(
-      (response: { message: string }) => {
+      (response: any) => {
         this.router.navigateByUrl('/');
       },
       (error: any) => {
