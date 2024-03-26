@@ -22,22 +22,25 @@ export class LandingComponent {
 
   testPost() {
     const token = localStorage.getItem('guardkey_session_token') as string;
-    const decodedToken = jwtDecode(token) as any;
 
-    this.service
-      .examplePost({
-        master_password: 'TheWitcher0310*',
-        decrypt_password: false,
-        user_id: decodedToken.user_id,
-      })
-      .subscribe(
-        (response: { data: Entry[] }) => {
-          this.entries = response.data;
-        },
-        (error: any) => {
-          console.log(error);
-        }
-      );
+    if (token) {
+      const decodedToken = jwtDecode(token) as any;
+
+      this.service
+        .examplePost({
+          master_password: 'TheWitcher0310*',
+          decrypt_password: false,
+          user_id: decodedToken.user_id,
+        })
+        .subscribe(
+          (response: { data: Entry[] }) => {
+            this.entries = response.data;
+          },
+          (error: any) => {
+            console.log(error);
+          }
+        );
+    }
   }
 
   ngOnInit(): void {

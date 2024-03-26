@@ -22,9 +22,8 @@ export class LoginComponent {
       .postRequest(formData.get('username'), formData.get('password'))
       .subscribe(
         (response: User) => {
-          console.log(response);
           localStorage.setItem('guardkey_session_token', response.token);
-          // this.router.navigateByUrl('/');
+          this.router.navigateByUrl('/');
         },
         (error: any) => {
           console.log(error);

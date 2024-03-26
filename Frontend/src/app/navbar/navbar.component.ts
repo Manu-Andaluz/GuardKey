@@ -1,7 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-navbar',
@@ -21,15 +20,9 @@ export class NavbarComponent {
     const token = localStorage.getItem('guardkey_session_token');
 
     if (token) {
-      const token = localStorage.getItem('guardkey_session_token') as string;
-
-      console.log(token);
-      const decodedToken = jwtDecode(token);
-      console.log('asdasd');
-      console.log(decodedToken);
-      //localStorage.removeItem('guardkey_session_token');
+      localStorage.removeItem('guardkey_session_token');
     }
 
-    //window.location.reload();
+    window.location.reload();
   }
 }
