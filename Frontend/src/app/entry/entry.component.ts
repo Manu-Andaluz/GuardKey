@@ -3,6 +3,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { EntryDetailsService } from '../services/EntryDetails/entry-details.service';
 import { ActivatedRoute } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-entry',
@@ -26,20 +27,26 @@ export class EntryComponent {
     search?: string;
     decrypt?: boolean;
   }) {
-    this.service
-      .postRequest({
-        master_password: 'masteradmin123!',
-        decrypt_password: decrypt,
-        search: search,
-      })
-      .subscribe(
-        (response: any) => {
-          this.entry = response.data;
-        },
-        (error: any) => {
-          console.log(error);
-        }
-      );
+    const token = localStorage.getItem('guardkey_session_token') as string;
+
+    if (token) {
+      const decodedToken = jwtDecode(token) as any;
+
+      this.service
+        .postRequest({
+          decrypt_password: decrypt,
+          search: search,
+          user_id: decodedToken.user_id,
+        })
+        .subscribe(
+          (response: any) => {
+            this.entry = response.data[0];
+          },
+          (error: any) => {
+            console.log(error);
+          }
+        );
+    }
   }
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {

@@ -3,7 +3,6 @@ import { CardComponent } from '../card/card.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { PostService } from '../services/post.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
@@ -15,7 +14,8 @@ import { jwtDecode } from 'jwt-decode';
   styleUrl: './landing.component.scss',
 })
 export class LandingComponent {
-  constructor(private service: PostService, private route: ActivatedRoute) {}
+  constructor(private service: PostService) {}
+
   entries: Entry[] = [];
   card_modal_entry?: Entry;
   @ViewChild('card_modal') cardModal!: ElementRef;
@@ -28,7 +28,6 @@ export class LandingComponent {
 
       this.service
         .examplePost({
-          master_password: 'TheWitcher0310*',
           decrypt_password: false,
           user_id: decodedToken.user_id,
         })

@@ -12,11 +12,7 @@ export class PostService {
 
   constructor(private httpClient: HttpClient) {}
 
-  examplePost(body: {
-    master_password: string;
-    decrypt_password: boolean;
-    user_id: string;
-  }) {
+  examplePost(body: { decrypt_password: boolean; user_id: string }) {
     return this.httpClient.post<{ data: Entry[] }>(this.path, body, {
       headers: this.headers,
     });

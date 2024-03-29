@@ -100,20 +100,22 @@ class Entries(models.Model):
         self.user = user
         self.save()
 
-    def retrieve_entries(self, mp, ds, search, user_id, decrypt_password=False):
+    def retrieve_entries(self,search, user_id):
         user = User.objects.get(id=user_id)
         if search == "" or search == None:
             all_data = Entries.objects.filter(user=user)
             return all_data
         else:
             data = Entries.objects.get(user=user,site_name=search)            
-            if decrypt_password:
-                mk = self.compute_master_key(mp, ds)
-                decrypted_mk = decrypt(key=mk, source=data.password,keyType="bytes")
-                data.password = decrypted_mk.decode()
-                return [data]
-
             return [data]
+    
+    def decrypted_entry(self,mp,ds,search,user_id):
+        user = User.objects.get(id=user_id)
+        data = Entries.objects.get(user=user,site_name=search)            
+        mk = self.compute_master_key(mp, ds)
+        decrypted_mk = decrypt(key=mk, source=data.password,keyType="bytes")
+        data.password = decrypted_mk.decode()
+        return [data]
     
     def delete_entry(self, search):
         data = Entries.objects.get(site_name=search)             

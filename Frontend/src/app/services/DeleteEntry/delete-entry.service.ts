@@ -9,7 +9,7 @@ export class DeleteEntryService {
 
   constructor(private httpClient: HttpClient) {}
 
-  deleteRequest(master_password: string, search: string) {
+  deleteRequest(master_password: string, search: string, user_id: number) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Master-Password': master_password,
@@ -17,7 +17,7 @@ export class DeleteEntryService {
 
     return this.httpClient.delete<{ data: Entry }>(this.path, {
       headers: headers,
-      params: { search: search },
+      params: { search: search, user_id: user_id },
     });
   }
 }

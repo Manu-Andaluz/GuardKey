@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 import { DeleteEntryService } from '../services/DeleteEntry/delete-entry.service';
 
 @Component({
@@ -16,21 +17,64 @@ export class CardComponent {
   @Input() password_quantity: number = 1;
   @Input() item_id?: string;
   @Output() onClick: EventEmitter<any> = new EventEmitter();
+  private master_password: string | undefined = undefined;
 
   constructor(private service: DeleteEntryService) {}
 
-  deleteEntry(search: string) {
-    this.service.deleteRequest('masteradmin123!', search).subscribe(
-      (response: { data: Entry }) => {
-        console.log(response);
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
+  //handleClick(): void {
+  //this.onClick.emit();
+  //}
+
+  deleteRequest(master_password: string, search: string, user_id: number) {
+    console.log('ee===--ee');
+    console.log(this.service);
+    return this.service
+      .deleteRequest(master_password, search, user_id)
+      .subscribe(
+        (response: { data: Entry }) => {
+          console.log(response);
+          window.location.reload();
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
   }
 
-  handleClick(): void {
-    this.onClick.emit();
+  deleteEntry(search: string) {
+    console.log(this);
+
+    if (this.master_password) {
+      const token = localStorage.getItem('guardkey_session_token') as string;
+
+      if (token) {
+        const decodedtoken = jwtDecode(token) as any;
+        //console.log(this.master_password);
+        //console.log(search);
+        console.log(this);
+        this.deleteRequest(this.master_password, search, decodedtoken.user_id);
+      }
+    } else {
+      const dialog = document.getElementById('card_modal') as HTMLDialogElement;
+
+      return new Promise<void>((resolve) => {
+        const closeHandler = () => {
+          dialog.removeEventListener('close', closeHandler);
+          console.log('Modal is closed, executing additional code...');
+
+          const master_password_input = document.getElementById(
+            'landing_master_password'
+          ) as any;
+          this.master_password = master_password_input.value;
+          resolve();
+          this.deleteEntry(search);
+        };
+
+        dialog.addEventListener('close', closeHandler);
+        dialog.showModal();
+      });
+    }
+
+    return;
   }
 }

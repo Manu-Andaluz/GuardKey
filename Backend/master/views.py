@@ -44,17 +44,19 @@ def create_entry(request):
 def extract_entries(request):
     if request.method == 'POST':
         request_body = json.loads(request.body) 
-        validate_password = Secrets().validate_master_password(request_body.get("master_password"))
+        search = request_body.get("search")
+        user_id = request_body.get("user_id")
+        master_password = request_body.get("master_password")
+        
+        if master_password:         
+            validate_password = Secrets().validate_master_password(master_password)
+            result = Entries().decrypted_entry(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, search=search, user_id=user_id)
 
-        if validate_password:
-            search = request_body.get("search")
-            decrypt_password = request_body.get("decrypt_password")
-            user_id = request_body.get("user_id")
-            result = Entries().retrieve_entries(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, search=search, decrypt_password=decrypt_password, user_id=user_id)
+        else: 
+            result = Entries().retrieve_entries(search=search, user_id=user_id)
 
-            serialized_result = EntriesSerializer(result, many=True).data
-
-            return JsonResponse({'data': serialized_result})
+        serialized_result = EntriesSerializer(result, many=True).data
+        return JsonResponse({'data': serialized_result})
     
     else:
         return JsonResponse({'message': 'Error !!'})
@@ -73,6 +75,7 @@ def generate_password(request):
 
 @api_view(['DELETE'])
 def delete_entry(request):
+    print('asdsda',request.headers.get("Master-Password"))
     validate_password = Secrets().validate_master_password(request.headers.get("Master-Password"))
 
     if validate_password:
