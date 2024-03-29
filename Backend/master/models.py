@@ -50,6 +50,7 @@ class Secrets(models.Model):
             print('---------------------', user_id)
             return False
         
+        user.onboarding = False
         self.user = user
         self.masterkey_hash = hashlib.sha256(password.encode()).hexdigest()
         self.device_secret = self.generate_device_secret()

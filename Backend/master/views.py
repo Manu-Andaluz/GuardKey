@@ -12,7 +12,6 @@ def create_masterkey(request):
         body_data = json.loads(body_unicode)
         user_masterkey = body_data.get("master_password")
         password_manager = Secrets()
-        print(body_data.get("user_id"))
         password_manager.set_masterkey(user_masterkey, body_data.get("user_id"))
         return JsonResponse({'message': 'Master password added to the database !!'})
     else:
@@ -75,7 +74,6 @@ def generate_password(request):
 
 @api_view(['DELETE'])
 def delete_entry(request):
-    print('asdsda',request.headers.get("Master-Password"))
     validate_password = Secrets().validate_master_password(request.headers.get("Master-Password"))
 
     if validate_password:

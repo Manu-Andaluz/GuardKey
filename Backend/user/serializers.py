@@ -13,5 +13,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token["user_id"] = user.id
         token["username"] = user.username
+        # Assuming UserProfile is related through 'user' field
+        if hasattr(user, 'userprofile'):
+            token["onboarding"] = user.userprofile.onboarding
+        else:
+            token["onboarding"] = False  # Set default value if UserProfile doesn't exist
         return token
 

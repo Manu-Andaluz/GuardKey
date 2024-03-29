@@ -14,3 +14,4 @@ class UserProfile(AbstractBaseUser):
     )
     secret = models.OneToOneField("master.Secrets",null=True,on_delete=models.CASCADE, related_name="secret")
     is_active = models.BooleanField(default=True)
+    onboarding = models.BooleanField(default=True)

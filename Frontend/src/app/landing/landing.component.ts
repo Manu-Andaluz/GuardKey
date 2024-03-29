@@ -3,7 +3,7 @@ import { CardComponent } from '../card/card.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { PostService } from '../services/post.service';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
 @Component({
@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
   styleUrl: './landing.component.scss',
 })
 export class LandingComponent {
-  constructor(private service: PostService) {}
+  constructor(private service: PostService, private router: Router) {}
 
   entries: Entry[] = [];
   card_modal_entry?: Entry;
@@ -44,6 +44,12 @@ export class LandingComponent {
 
   ngOnInit(): void {
     this.testPost(); // Call testPost() when the component is initialized
+    const token = localStorage.getItem('guardkey_session_token') as string;
+    const decodedToken = jwtDecode(token) as any;
+
+    if (decodedToken.onboarding === false) {
+      this.router.navigateByUrl('/onboarding');
+    }
   }
 
   openModal = (card_entry: Entry): void => {
