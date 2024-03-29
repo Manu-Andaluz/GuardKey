@@ -26,13 +26,10 @@ export class CardComponent {
   //}
 
   deleteRequest(master_password: string, search: string, user_id: number) {
-    console.log('ee===--ee');
-    console.log(this.service);
     return this.service
       .deleteRequest(master_password, search, user_id)
       .subscribe(
         (response: { data: Entry }) => {
-          console.log(response);
           window.location.reload();
         },
         (error: any) => {
@@ -42,16 +39,11 @@ export class CardComponent {
   }
 
   deleteEntry(search: string) {
-    console.log(this);
-
     if (this.master_password) {
       const token = localStorage.getItem('guardkey_session_token') as string;
 
       if (token) {
         const decodedtoken = jwtDecode(token) as any;
-        //console.log(this.master_password);
-        //console.log(search);
-        console.log(this);
         this.deleteRequest(this.master_password, search, decodedtoken.user_id);
       }
     } else {
@@ -60,7 +52,6 @@ export class CardComponent {
       return new Promise<void>((resolve) => {
         const closeHandler = () => {
           dialog.removeEventListener('close', closeHandler);
-          console.log('Modal is closed, executing additional code...');
 
           const master_password_input = document.getElementById(
             'landing_master_password'
