@@ -11,22 +11,34 @@ import jwt
 
 @api_view(['POST'])
 def signup(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        user = User.objects.get(username=request.data['username'])
-        user.set_password(request.data['password'])
-        user.save()
-        UserProfile.objects.create(user=user)
-        token = CustomTokenObtainPairSerializer.get_token(user=user)
-        return Response({'token': str(token), 'user': serializer.data})
-    return Response(serializer.errors, status=status.HTTP_200_OK)
+    username = request.data.get('username')
+    password = request.data.get('password')
+    email = request.data.get('email')
+
+    if username and password and email:
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.get(username=username)
+            user.set_password(password)
+            user.save()
+            UserProfile.objects.create(user=user)
+            token = CustomTokenObtainPairSerializer.get_token(user=user)
+            return Response({'token': str(token), 'user': serializer.data})
+        return Response(serializer.errors, status=status.HTTP_200_OK)
+
+    else:
+        return Response("Missing required data !!", status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(User, username=request.data['username'])
+    try:
+        user = User.objects.get(username=request.data['username'])
+    except User.DoesNotExist:
+        return Response("Username or Password incorrect !!", status=status.HTTP_404_NOT_FOUND)
+    
     if not user.check_password(request.data['password']):
-        return Response("missing user", status=status.HTTP_404_NOT_FOUND)
+        return Response("Username or Password incorrect !!", status=status.HTTP_404_NOT_FOUND)
     token = CustomTokenObtainPairSerializer.get_token(user=user)
     serializer = UserSerializer(user)
     return Response({'token': str(token), 'user': serializer.data})

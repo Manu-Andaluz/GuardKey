@@ -2,7 +2,7 @@
 <section class="login_container">
   <h1>Sign in</h1>
 
-  <form action="" id="login_form">
+  <form action="{{ login }}" id="login_form">
     <div>
       <label for="username">Username*</label>
       <input
@@ -22,9 +22,10 @@
         type="password"
       />
     </div>
+    <p *ngIf="login_error" class="error">{{ login_error }}</p>
 
     <button (click)="login($event)" class="button submit">Continue</button>
   </form>
 
-  <a routerLink="/register" class="button outlined">Create an account</a>
+  <a routerLink="/register" class="button">Create an account</a>
 </section>
