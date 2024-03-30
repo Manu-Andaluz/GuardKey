@@ -18,6 +18,7 @@ export class LandingComponent {
 
   entries: Entry[] = [];
   card_modal_entry?: Entry;
+  isUser: Boolean = false;
   @ViewChild('card_modal') cardModal!: ElementRef;
 
   testPost() {
@@ -33,6 +34,7 @@ export class LandingComponent {
         })
         .subscribe(
           (response: { data: Entry[] }) => {
+            console.log(response);
             this.entries = response.data;
           },
           (error: any) => {
@@ -46,6 +48,7 @@ export class LandingComponent {
     this.testPost(); // Call testPost() when the component is initialized
     const token = localStorage.getItem('guardkey_session_token') as string;
     if (token) {
+      this.isUser = true;
       const decodedToken = jwtDecode(token) as any;
       console.log(decodedToken);
       if (decodedToken.onboarding === true) {

@@ -47,6 +47,8 @@
 
   &.outlined {
     transition: background 300ms ease;
+    border: 1px solid $primary-border;
+    background-color: gray;
 
     &:hover {
     }
