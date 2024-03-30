@@ -4,6 +4,7 @@
   place-content: center;
   text-align: center;
   height: calc(100vh - 75px);
+  padding: 0 16px;
 
   h1 {
     font-size: 32px;
@@ -27,8 +28,17 @@
     input {
       height: 28px;
       padding: 20px 16px;
-      width: 300px;
+      width: 450px;
       font-size: 16px;
+
+      @media (max-width: 500px) {
+        width: 300px;
+      }
+    }
+
+    button {
+      margin: auto;
+      margin-top: 20px;
     }
   }
 }

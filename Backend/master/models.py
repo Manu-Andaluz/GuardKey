@@ -9,6 +9,7 @@ from Crypto.Random import get_random_bytes
 from .utils import encrypt,decrypt
 from django.conf import settings
 from django.contrib.auth.models import User
+from user.models import UserProfile
 
 # Create your models here.
 class Secrets(models.Model):
@@ -49,8 +50,15 @@ class Secrets(models.Model):
             # Handle the case where user does not exist
             print('---------------------', user_id)
             return False
+
+          # Check if UserProfile exists
+        if hasattr(user, 'user_profile'):
+            user.user_profile.onboarding = False
+            user.user_profile.save()
+        else:
+            # Create UserProfile if it doesn't exist
+            UserProfile.objects.create(user=user, onboarding=False)
         
-        user.onboarding = False
         self.user = user
         self.masterkey_hash = hashlib.sha256(password.encode()).hexdigest()
         self.device_secret = self.generate_device_secret()
