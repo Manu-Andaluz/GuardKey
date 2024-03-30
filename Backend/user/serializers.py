@@ -17,6 +17,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         if hasattr(user, 'userprofile'):
             token["onboarding"] = user.userprofile.onboarding
         else:
-            token["onboarding"] = False  # Set default value if UserProfile doesn't exist
+            token["onboarding"] = True  # Set default value if UserProfile doesn't exist
         return token
 

@@ -45,10 +45,12 @@ export class LandingComponent {
   ngOnInit(): void {
     this.testPost(); // Call testPost() when the component is initialized
     const token = localStorage.getItem('guardkey_session_token') as string;
-    const decodedToken = jwtDecode(token) as any;
-
-    if (decodedToken.onboarding === false) {
-      this.router.navigateByUrl('/onboarding');
+    if (token) {
+      const decodedToken = jwtDecode(token) as any;
+      console.log(decodedToken);
+      if (decodedToken.onboarding === true) {
+        this.router.navigateByUrl('/onboarding');
+      }
     }
   }
 

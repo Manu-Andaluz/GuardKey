@@ -47,18 +47,15 @@ class Secrets(models.Model):
             user = User.objects.get(id=user_id)
             print(user)
         except User.DoesNotExist:
-            # Handle the case where user does not exist
-            print('---------------------', user_id)
-            return False
+           return False
 
-          # Check if UserProfile exists
-        if hasattr(user, 'user_profile'):
-            user.user_profile.onboarding = False
-            user.user_profile.save()
-        else:
-            # Create UserProfile if it doesn't exist
-            UserProfile.objects.create(user=user, onboarding=False)
-        
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+        except UserProfile.DoesNotExist:
+            print("UserProfile does not exist for this user")
+
+        user_profile.onboarding = False
+        user_profile.save()
         self.user = user
         self.masterkey_hash = hashlib.sha256(password.encode()).hexdigest()
         self.device_secret = self.generate_device_secret()

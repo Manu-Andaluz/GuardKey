@@ -3,6 +3,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { MasterPasswordService } from '../services/MasterPassword/master-password.service';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { RefreshTokenService } from '../services/RefreshToken/refresh-token.service';
 
 @Component({
   selector: 'app-onboarding',
@@ -12,7 +13,11 @@ import { jwtDecode } from 'jwt-decode';
   styleUrl: './onboarding.component.scss',
 })
 export class OnboardingComponent {
-  constructor(private service: MasterPasswordService, router: Router) {}
+  constructor(
+    private service: MasterPasswordService,
+    private refresh_service: RefreshTokenService,
+    private router: Router
+  ) {}
 
   setMasterPassword(e: Event) {
     e.preventDefault();
@@ -27,6 +32,11 @@ export class OnboardingComponent {
       this.service.postRequest(decodedToken.user_id, input.value).subscribe(
         (response: any) => {
           console.log(response);
+
+          this.refresh_service.postRequest(token).subscribe((response: any) => {
+            localStorage.setItem('guardkey_session_token', response.token);
+            this.router.navigateByUrl('/');
+          });
         },
         (error: any) => {
           console.log(error);

@@ -6,6 +6,8 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from .serializers import UserSerializer,CustomTokenObtainPairSerializer
+from .models import UserProfile
+import jwt
 
 @api_view(['POST'])
 def signup(request):
@@ -15,6 +17,7 @@ def signup(request):
         user = User.objects.get(username=request.data['username'])
         user.set_password(request.data['password'])
         user.save()
+        UserProfile.objects.create(user=user)
         token = CustomTokenObtainPairSerializer.get_token(user=user)
         return Response({'token': str(token), 'user': serializer.data})
     return Response(serializer.errors, status=status.HTTP_200_OK)
@@ -27,6 +30,15 @@ def login(request):
     token = CustomTokenObtainPairSerializer.get_token(user=user)
     serializer = UserSerializer(user)
     return Response({'token': str(token), 'user': serializer.data})
+
+@api_view(['POST'])
+def refresh_token(request):
+    old_token = request.data['token']
+    decoded_token = jwt.decode(old_token,algorithms=None,verify=False, options={'verify_signature': False})
+    user = get_object_or_404(User, username=decoded_token['username'])
+    token = CustomTokenObtainPairSerializer.get_token(user=user)
+    return Response({'token': str(token)})
+    
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
