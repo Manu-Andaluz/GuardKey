@@ -62,11 +62,12 @@ class Secrets(models.Model):
         self.save()
         return True
 
-    def validate_master_password(self,password):
+    def validate_master_password(self,password, user_id):
+        user = User.objects.get(id=user_id)
         hashed_mp = hashlib.sha256(password.encode()).hexdigest()
-        result = Secrets.objects.all()
-        if hashed_mp == result[0].masterkey_hash:
-            return result[0]
+        result = Secrets.objects.get(user=user)
+        if hashed_mp == result.masterkey_hash:
+            return result
         else :
             return False
 

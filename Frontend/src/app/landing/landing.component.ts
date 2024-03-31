@@ -34,7 +34,6 @@ export class LandingComponent {
         })
         .subscribe(
           (response: { data: Entry[] }) => {
-            console.log(response);
             this.entries = response.data;
           },
           (error: any) => {
@@ -50,7 +49,6 @@ export class LandingComponent {
     if (token) {
       this.isUser = true;
       const decodedToken = jwtDecode(token) as any;
-      console.log(decodedToken);
       if (decodedToken.onboarding === true) {
         this.router.navigateByUrl('/onboarding');
       }

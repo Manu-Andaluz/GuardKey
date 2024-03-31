@@ -4,6 +4,8 @@ from .models import Secrets, Entries
 from .serializers import SecretsSerializer, EntriesSerializer
 from rest_framework.decorators import api_view
 import json
+from rest_framework.response import Response
+from rest_framework import status
 
 @api_view(['POST'])
 def create_masterkey(request):
@@ -21,7 +23,7 @@ def create_masterkey(request):
 def create_entry(request):
     if request.method == 'POST':
         request_body = json.loads(request.body) 
-        validate_password = Secrets().validate_master_password(request_body.get("master_password"))
+        validate_password = Secrets().validate_master_password(request_body.get("master_password"), request_body.get("user_id"))
 
         if validate_password:
             site_name = request_body.get("site_name")
@@ -35,7 +37,7 @@ def create_entry(request):
             Entries().add_entry(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, sitename=site_name, siteurl=site_url, siteimage=site_image, email=email,username=username,password=password, user_id=user_id)
             return JsonResponse({'message': "Entry added successfully !!"})
         else:
-            return JsonResponse({'message': "The master password is incorrect !! Try again !!"})
+            return Response("Wrong Master Password !!", status=status.HTTP_404_NOT_FOUND) 
     else:
         return JsonResponse({'message': 'Error !!'})
 
@@ -48,9 +50,11 @@ def extract_entries(request):
         master_password = request_body.get("master_password")
         
         if master_password:         
-            validate_password = Secrets().validate_master_password(master_password)
-            result = Entries().decrypted_entry(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, search=search, user_id=user_id)
-
+            validate_password = Secrets().validate_master_password(master_password,user_id)
+            if(validate_password):
+                result = Entries().decrypted_entry(mp=validate_password.masterkey_hash,ds=validate_password.device_secret, search=search, user_id=user_id)
+            else:
+                return Response("Wrong Master Password !!", status=status.HTTP_404_NOT_FOUND) 
         else: 
             result = Entries().retrieve_entries(search=search, user_id=user_id)
 
@@ -74,12 +78,15 @@ def generate_password(request):
 
 @api_view(['DELETE'])
 def delete_entry(request):
-    validate_password = Secrets().validate_master_password(request.headers.get("Master-Password"))
+    validate_password = Secrets().validate_master_password(request.headers.get("Master-Password"),request.GET["user_id"])
 
     if validate_password:
         response = Entries().delete_entry(request.GET["search"])
         serialized_result = EntriesSerializer(response).data
         return JsonResponse({'data': serialized_result})
+    
+    else:
+        return Response("Wrong Master Password !!", status=status.HTTP_404_NOT_FOUND) 
 
 #@api_view(['POST'])
 #def generate_key(request):

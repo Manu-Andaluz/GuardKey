@@ -14,7 +14,7 @@ export class EntryDetailsService {
 
   postRequest(body: {
     search: string;
-    decrypt_password: boolean;
+    master_password?: string;
     user_id: number;
   }) {
     return this.httpClient.post<{ data: Entry[] }>(this.path, body, {

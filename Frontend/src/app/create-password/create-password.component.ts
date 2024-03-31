@@ -3,17 +3,19 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { AddEntryService } from '../services/AddEntry/add-entry.service';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-password',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, CommonModule],
   templateUrl: './create-password.component.html',
   styleUrl: './create-password.component.scss',
 })
 export class CreatePasswordComponent {
   constructor(private service: AddEntryService, private router: Router) {}
 
+  master_password_error?: string;
   errors: FormErrors = {
     master_password: '',
     site_name: '',
@@ -69,6 +71,7 @@ export class CreatePasswordComponent {
       },
       (error: any) => {
         console.log(error);
+        this.master_password_error = error.error;
       }
     );
   }

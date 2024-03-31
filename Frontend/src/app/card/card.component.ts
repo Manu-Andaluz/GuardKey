@@ -21,10 +21,6 @@ export class CardComponent {
 
   constructor(private service: DeleteEntryService) {}
 
-  //handleClick(): void {
-  //this.onClick.emit();
-  //}
-
   deleteRequest(master_password: string, search: string, user_id: number) {
     return this.service
       .deleteRequest(master_password, search, user_id)
@@ -33,7 +29,8 @@ export class CardComponent {
           window.location.reload();
         },
         (error: any) => {
-          console.log(error);
+          alert(error.error);
+          this.master_password = undefined;
         }
       );
   }
@@ -47,25 +44,29 @@ export class CardComponent {
         this.deleteRequest(this.master_password, search, decodedtoken.user_id);
       }
     } else {
-      const dialog = document.getElementById('card_modal') as HTMLDialogElement;
-
-      return new Promise<void>((resolve) => {
-        const closeHandler = () => {
-          dialog.removeEventListener('close', closeHandler);
-
-          const master_password_input = document.getElementById(
-            'landing_master_password'
-          ) as any;
-          this.master_password = master_password_input.value;
-          resolve();
-          this.deleteEntry(search);
-        };
-
-        dialog.addEventListener('close', closeHandler);
-        dialog.showModal();
-      });
+      this.getModalValue(search);
     }
 
     return;
+  }
+
+  getModalValue(search: string) {
+    const dialog = document.getElementById('card_modal') as HTMLDialogElement;
+
+    return new Promise<void>((resolve) => {
+      const closeHandler = () => {
+        dialog.removeEventListener('close', closeHandler);
+
+        const master_password_input = document.getElementById(
+          'landing_master_password'
+        ) as any;
+        this.master_password = master_password_input.value;
+        resolve();
+        this.deleteEntry(search);
+      };
+
+      dialog.addEventListener('close', closeHandler);
+      dialog.showModal();
+    });
   }
 }

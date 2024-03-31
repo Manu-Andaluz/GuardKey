@@ -19,14 +19,9 @@ export class EntryComponent {
   ) {}
   entry_id: string = '';
   entry?: Entry;
+  private master_password?: string;
 
-  getEntry({
-    search = this.entry_id,
-    decrypt = false,
-  }: {
-    search?: string;
-    decrypt?: boolean;
-  }) {
+  getEntry({ search = this.entry_id }: { search?: string }) {
     const token = localStorage.getItem('guardkey_session_token') as string;
 
     if (token) {
@@ -34,12 +29,13 @@ export class EntryComponent {
 
       this.service
         .postRequest({
-          decrypt_password: decrypt,
+          master_password: this.master_password,
           search: search,
           user_id: decodedToken.user_id,
         })
         .subscribe(
           (response: any) => {
+            console.log(response);
             this.entry = response.data[0];
           },
           (error: any) => {
@@ -52,6 +48,28 @@ export class EntryComponent {
     this.route.params.subscribe((params: any) => {
       this.getEntry({ search: params['id'] });
       this.entry_id = params['id'];
+    });
+  }
+
+  getModalValue() {
+    const dialog = document.getElementById(
+      'entry_password_modal'
+    ) as HTMLDialogElement;
+
+    return new Promise<void>((resolve) => {
+      const closeHandler = () => {
+        dialog.removeEventListener('close', closeHandler);
+
+        const master_password_input = document.getElementById(
+          'entry_master_password'
+        ) as any;
+        console.log(master_password_input.value);
+        this.master_password = master_password_input.value;
+        resolve();
+      };
+
+      dialog.addEventListener('close', closeHandler);
+      dialog.showModal();
     });
   }
 }
