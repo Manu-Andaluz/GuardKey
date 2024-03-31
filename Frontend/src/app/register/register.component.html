@@ -5,11 +5,13 @@
     <div>
       <label for="username">Username*</label>
       <input placeholder="Username" name="username" id="username" type="text" />
+      <p *ngIf="errors.username" class="error">{{ errors.username }}</p>
     </div>
 
     <div>
       <label for="email">Email*</label>
       <input placeholder="Email" name="email" id="email" type="email" />
+      <p *ngIf="errors.email" class="error">{{ errors.email }}</p>
     </div>
 
     <div>
@@ -20,9 +22,12 @@
         id="password"
         type="password"
       />
+      <p *ngIf="errors.password" class="error">{{ errors.password }}</p>
     </div>
 
-    <p *ngIf="register_error" class="error">{{ register_error }}</p>
+    <p *ngIf="register_error" class="error" style="margin: auto">
+      {{ register_error }}
+    </p>
 
     <button class="button submit" (click)="register($event)">Continue</button>
   </form>

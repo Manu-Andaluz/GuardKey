@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from .serializers import UserSerializer,CustomTokenObtainPairSerializer
 from .models import UserProfile
+from django.db.models import Q
 import jwt
 
 @api_view(['POST'])
@@ -16,16 +17,22 @@ def signup(request):
     email = request.data.get('email')
 
     if username and password and email:
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            user = User.objects.get(username=username)
-            user.set_password(password)
-            user.save()
-            UserProfile.objects.create(user=user)
-            token = CustomTokenObtainPairSerializer.get_token(user=user)
-            return Response({'token': str(token), 'user': serializer.data})
-        return Response(serializer.errors, status=status.HTTP_200_OK)
+
+        try:
+            already_exist = User.objects.get(username=username)
+            if already_exist:
+                return Response("A user with that username or email already exist !!", status=status.HTTP_404_NOT_FOUND) 
+        except User.DoesNotExist: 
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                user = User.objects.get(username=username)
+                user.set_password(password)
+                user.save()
+                UserProfile.objects.create(user=user)
+                token = CustomTokenObtainPairSerializer.get_token(user=user)
+                return Response({'token': str(token), 'user': serializer.data})
+            return Response(serializer.errors, status=status.HTTP_200_OK)
 
     else:
         return Response("Missing required data !!", status=status.HTTP_404_NOT_FOUND)

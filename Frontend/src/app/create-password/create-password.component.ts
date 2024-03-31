@@ -48,8 +48,6 @@ export class CreatePasswordComponent {
     const form = document.getElementById('add_entry') as HTMLFormElement;
     const errors = this.validateForm(form);
 
-    console.log(Object.keys(errors));
-
     if (Object.keys(errors).length > 0) {
       this.errors = errors;
       return;

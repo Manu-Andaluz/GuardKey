@@ -11,6 +11,7 @@
         id="username"
         type="text"
       />
+      <p *ngIf="errors.username" class="error">{{ errors.username }}</p>
     </div>
 
     <div>
@@ -21,8 +22,11 @@
         id="password"
         type="password"
       />
+      <p *ngIf="errors.password" class="error">{{ errors.password }}</p>
     </div>
-    <p *ngIf="login_error" class="error">{{ login_error }}</p>
+    <p *ngIf="login_error" class="error" style="margin: auto">
+      {{ login_error }}
+    </p>
 
     <button (click)="login($event)" class="button submit">Continue</button>
   </form>

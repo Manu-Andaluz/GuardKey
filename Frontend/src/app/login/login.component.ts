@@ -13,26 +13,54 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   login_error?: string;
+  errors: {
+    username?: string;
+    password?: string;
+  } = {};
   constructor(private service: LoginService, private router: Router) {}
+
+  validateForm() {
+    const form = document.getElementById('login_form') as HTMLFormElement;
+    const formData = new FormData(form) as any;
+
+    console.log(formData.get('username'));
+
+    if (!formData.get('username')) {
+      this.errors.username = 'Username required';
+    } else {
+      this.errors.username = undefined;
+    }
+
+    if (!formData.get('password')) {
+      this.errors.password = 'Password required';
+    } else {
+      this.errors.password = undefined;
+    }
+  }
 
   login(event?: Event) {
     if (event) {
       event.preventDefault();
     }
-    const form = document.getElementById('login_form') as HTMLFormElement;
-    const formData = new FormData(form) as any;
+    this.validateForm();
 
-    this.service
-      .postRequest(formData.get('username'), formData.get('password'))
-      .subscribe(
-        (response: User) => {
-          localStorage.setItem('guardkey_session_token', response.token);
-          this.router.navigateByUrl('/');
-        },
-        (error: any) => {
-          console.log(error);
-          this.login_error = error.error;
-        }
-      );
+    if (!this.errors.username && !this.errors.password) {
+      const form = document.getElementById('login_form') as HTMLFormElement;
+      const formData = new FormData(form) as any;
+
+      this.service
+        .postRequest(formData.get('username'), formData.get('password'))
+        .subscribe(
+          (response: User) => {
+            localStorage.setItem('guardkey_session_token', response.token);
+            this.router.navigateByUrl('/');
+          },
+          (error: any) => {
+            this.login_error = error.error;
+          }
+        );
+    } else {
+      return;
+    }
   }
 }
