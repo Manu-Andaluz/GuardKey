@@ -35,16 +35,20 @@ export class CardComponent {
       );
   }
 
-  deleteEntry(search: string) {
-    if (this.master_password) {
-      const token = localStorage.getItem('guardkey_session_token') as string;
+  async deleteEntry(search: string) {
+    if (!this.master_password) {
+      await this.getModalValue(search);
+    }
 
-      if (token) {
-        const decodedtoken = jwtDecode(token) as any;
-        this.deleteRequest(this.master_password, search, decodedtoken.user_id);
-      }
-    } else {
-      this.getModalValue(search);
+    const token = localStorage.getItem('guardkey_session_token') as string;
+
+    if (token) {
+      const decodedtoken = jwtDecode(token) as any;
+      this.deleteRequest(
+        this.master_password || '',
+        search,
+        decodedtoken.user_id
+      );
     }
 
     return;

@@ -19,12 +19,22 @@ export class EntryComponent {
   ) {}
   entry_id: string = '';
   entry?: Entry;
-  private master_password?: string;
+  private master_password?: string = undefined;
 
-  getEntry({ search = this.entry_id }: { search?: string }) {
+  async getEntry({
+    search = this.entry_id,
+    fromModal = false,
+  }: {
+    search?: string;
+    fromModal?: boolean;
+  }) {
     const token = localStorage.getItem('guardkey_session_token') as string;
 
     if (token) {
+      if (fromModal && !this.master_password) {
+        await this.getModalValue();
+      }
+
       const decodedToken = jwtDecode(token) as any;
 
       this.service
@@ -44,12 +54,30 @@ export class EntryComponent {
         );
     }
   }
+
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.getEntry({ search: params['id'] });
       this.entry_id = params['id'];
     });
   }
+
+  closeModal = (): void => {
+    const modalElement = document.getElementById(
+      'entry_password_modal'
+    ) as HTMLDialogElement;
+    modalElement.classList.add('close');
+    const animationEndHandler = (event: any) => {
+      modalElement.close();
+      modalElement.classList.remove('close');
+      modalElement.removeEventListener('animationend', animationEndHandler);
+    };
+    modalElement.addEventListener('animationend', animationEndHandler);
+
+    setTimeout(() => {
+      modalElement.classList.add('open');
+    });
+  };
 
   getModalValue() {
     const dialog = document.getElementById(
