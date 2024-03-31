@@ -62,7 +62,8 @@ export class EntryComponent {
     });
   }
 
-  closeModal = (): void => {
+  closeModal = (event: Event): void => {
+    event.preventDefault();
     const modalElement = document.getElementById(
       'entry_password_modal'
     ) as HTMLDialogElement;

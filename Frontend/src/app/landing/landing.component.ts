@@ -61,7 +61,8 @@ export class LandingComponent {
     modalElement.open = true;
   };
 
-  closeModal = (): void => {
+  closeModal = (event: Event): void => {
+    event.preventDefault();
     const modalElement = this.cardModal.nativeElement as HTMLDialogElement;
     modalElement.classList.add('close');
     const animationEndHandler = (event: any) => {

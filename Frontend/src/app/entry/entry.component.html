@@ -40,15 +40,19 @@
   </div>
 
   <dialog id="entry_password_modal" #entry_password_modal class="dialog">
-    <h2>Enter your master password to see the decoded password:</h2>
-    <input
-      type="password"
-      placeholder="Master Password"
-      id="entry_master_password"
-    />
+    <form action="">
+      <h2>Enter your master password to see the decoded password:</h2>
+      <input
+        type="password"
+        placeholder="Master Password"
+        id="entry_master_password"
+      />
 
-    <div>
-      <button class="button submit" (click)="closeModal()">Continue</button>
-    </div>
+      <div>
+        <button class="button submit" (click)="closeModal($event)">
+          Continue
+        </button>
+      </div>
+    </form>
   </dialog>
 </section>

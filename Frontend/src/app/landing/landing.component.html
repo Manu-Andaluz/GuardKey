@@ -52,16 +52,20 @@
 
 <section class="cards_container">
   <dialog id="card_modal" #card_modal class="dialog">
-    <h2>Enter your master password to delete the selected entry:</h2>
-    <input
-      type="password"
-      placeholder="Master Password"
-      id="landing_master_password"
-    />
+    <form action="">
+      <h2>Enter your master password to delete the selected entry:</h2>
+      <input
+        type="password"
+        placeholder="Master Password"
+        id="landing_master_password"
+      />
 
-    <div>
-      <button class="button submit" (click)="closeModal()">Continue</button>
-    </div>
+      <div>
+        <button class="button submit" (click)="closeModal($event)">
+          Continue
+        </button>
+      </div>
+    </form>
   </dialog>
 
   <ul>
