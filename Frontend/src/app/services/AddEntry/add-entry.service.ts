@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AddEntryService {
-  private path = 'http://localhost:8000/manager/create-entry/';
+  private path =
+    'https://mynotes-production-ac8e.up.railway.app/manager/create-entry/';
   private headers = new HttpHeaders({
     'Content-Type': 'application/json', // Example header
   });

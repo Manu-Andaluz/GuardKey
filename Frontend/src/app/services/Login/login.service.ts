@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class LoginService {
-  private path = 'http://localhost:8000/auth/login/';
+  private path = 'https://mynotes-production-ac8e.up.railway.app/auth/login/';
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });

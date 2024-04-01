@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class DeleteEntryService {
-  private path = `http://localhost:8000/manager/delete-entry/`;
+  private path = `https://mynotes-production-ac8e.up.railway.app/manager/delete-entry/`;
 
   constructor(private httpClient: HttpClient) {}
 
