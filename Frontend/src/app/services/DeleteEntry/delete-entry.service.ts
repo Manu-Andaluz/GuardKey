@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeleteEntryService {
-  private path = `http://localhost:8000/manager/delete-entry/`;
+  private path = `${environment.apiPath}/manager/delete-entry/`;
 
   constructor(private httpClient: HttpClient) {}
 

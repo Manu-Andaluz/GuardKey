@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MasterPasswordService {
-  private path = 'http://localhost:8000/manager/create-master-password/';
+  private path = `${environment.apiPath}/manager/create-master-password/`;
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });

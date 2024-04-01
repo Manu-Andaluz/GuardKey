@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  private path = 'http://localhost:8000/auth/login/';
+  private path = `${environment.apiPath}/auth/login/`;
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });

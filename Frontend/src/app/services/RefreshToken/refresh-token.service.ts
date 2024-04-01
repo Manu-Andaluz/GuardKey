@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RefreshTokenService {
-  private path = 'http://localhost:8000/auth/refresh-token/';
+  private path = `${environment.apiPath}/auth/refresh-token/`;
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });

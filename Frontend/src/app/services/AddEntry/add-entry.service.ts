@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AddEntryService {
-  private path = 'http://localhost:8000/manager/create-entry/';
+  private path = `${environment.apiPath}/manager/create-entry/`;
   private headers = new HttpHeaders({
     'Content-Type': 'application/json', // Example header
   });

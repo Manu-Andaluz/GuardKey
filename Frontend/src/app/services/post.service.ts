@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  private path = 'http://localhost:8000/manager/retrieve-entries/';
+  private path = `${environment.apiPath}/manager/retrieve-entries/`;
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
