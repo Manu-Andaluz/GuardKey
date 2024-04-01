@@ -29,10 +29,10 @@
 
   &.submit {
     transition: background 300ms ease;
-    background-color: $primary-blue;
+    background-color: $primary-blue-dark;
 
     &:hover {
-      background-color: $primary-blue-dark;
+      background-color: $primary-blue;
     }
   }
 
@@ -58,9 +58,11 @@
   }
 
   &.alternative {
+    background-color: $secondary-color-dark;
     transition: background 300ms ease;
 
     &:hover {
+      background-color: $secondary-color;
     }
   }
 }

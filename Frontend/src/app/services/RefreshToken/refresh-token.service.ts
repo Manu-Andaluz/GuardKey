@@ -5,8 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class RefreshTokenService {
-  private path =
-    'https://mynotes-production-ac8e.up.railway.app/auth/refresh-token/';
+  private path = 'http://localhost:8000/auth/refresh-token/';
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });

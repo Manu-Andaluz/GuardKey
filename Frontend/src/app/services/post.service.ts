@@ -5,8 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class PostService {
-  private path =
-    'https://mynotes-production-ac8e.up.railway.app/manager/retrieve-entries/';
+  private path = 'http://localhost:8000/manager/retrieve-entries/';
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });

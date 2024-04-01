@@ -5,6 +5,7 @@ import { RegisterComponent } from './register/register.component';
 import { EntryComponent } from './entry/entry.component';
 import { CreatePasswordComponent } from './create-password/create-password.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
+import { GeneratePasswordComponent } from './generate-password/generate-password.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -13,4 +14,5 @@ export const routes: Routes = [
   { path: 'create-password', component: CreatePasswordComponent },
   { path: 'onboarding', component: OnboardingComponent },
   { path: 'entry/:id', component: EntryComponent },
+  { path: 'generate-password', component: GeneratePasswordComponent },
 ];
