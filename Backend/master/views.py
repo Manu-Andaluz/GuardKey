@@ -64,17 +64,19 @@ def extract_entries(request):
     else:
         return JsonResponse({'message': 'Error !!'})
      
-@api_view(['GET'])
+@api_view(['POST'])
 def generate_password(request):
     request_body = json.loads(request.body)
     length = request_body.get("password_length")
 
     if length:
         password = Secrets().generate_random_password(length=length)
-        return JsonResponse({'data': password})
-
+        return Response({'data': password})
     else:
-        return JsonResponse({'message': "The length of the password is required !!"})
+        password = Secrets().generate_random_password()
+        return Response({'data': password})
+
+
 
 @api_view(['DELETE'])
 def delete_entry(request):

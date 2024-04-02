@@ -17,7 +17,7 @@ class Secrets(models.Model):
     masterkey_hash = models.TextField(null=False)
     device_secret = models.TextField(null=False)
 
-    def generate_random_password(self,length=10):
+    def generate_random_password(self,length=50):
         # Define character sets
         uppercase_letters = string.ascii_uppercase
         digits = string.digits
