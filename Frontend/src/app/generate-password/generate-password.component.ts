@@ -15,9 +15,12 @@ export class GeneratePasswordComponent {
   constructor(private service: GeneratePasswordService) {}
 
   getPassowrd() {
-    this.service.getRequest().subscribe(
+    const input = document.getElementById(
+      'password_length'
+    ) as HTMLInputElement;
+
+    this.service.getRequest(input.value ? Number(input.value) : 50).subscribe(
       (response: any) => {
-        console.log(response);
         this.generated_password = response.data;
       },
       (error: any) => {

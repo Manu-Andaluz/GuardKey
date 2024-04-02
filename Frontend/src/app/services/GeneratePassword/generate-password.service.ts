@@ -13,10 +13,10 @@ export class GeneratePasswordService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getRequest() {
+  getRequest(password_length: number) {
     return this.httpClient.post<{ data: Entry[] }>(
       this.path,
-      {},
+      { password_length },
       { headers: this.headers }
     );
   }
