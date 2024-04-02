@@ -4,13 +4,25 @@
   <form action="{{ register }}" id="register_form">
     <div>
       <label for="username">Username*</label>
-      <input placeholder="Username" name="username" id="username" type="text" />
+      <input
+        placeholder="Username"
+        name="username"
+        id="username"
+        type="text"
+        autocomplete="false"
+      />
       <p *ngIf="errors.username" class="error">{{ errors.username }}</p>
     </div>
 
     <div>
       <label for="email">Email*</label>
-      <input placeholder="Email" name="email" id="email" type="email" />
+      <input
+        placeholder="Email"
+        name="email"
+        id="email"
+        type="email"
+        autocomplete="false"
+      />
       <p *ngIf="errors.email" class="error">{{ errors.email }}</p>
     </div>
 
@@ -21,6 +33,7 @@
         name="password"
         id="password"
         type="password"
+        autocomplete="false"
       />
       <p *ngIf="errors.password" class="error">{{ errors.password }}</p>
     </div>

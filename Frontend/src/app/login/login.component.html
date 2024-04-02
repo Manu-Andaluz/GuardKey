@@ -10,6 +10,7 @@
         name="username"
         id="username"
         type="text"
+        autocomplete="false"
       />
       <p *ngIf="errors.username" class="error">{{ errors.username }}</p>
     </div>
@@ -21,6 +22,7 @@
         name="password"
         id="password"
         type="password"
+        autocomplete="false"
       />
       <p *ngIf="errors.password" class="error">{{ errors.password }}</p>
     </div>
