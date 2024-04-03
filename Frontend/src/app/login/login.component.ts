@@ -17,6 +17,7 @@ export class LoginComponent {
     username?: string;
     password?: string;
   } = {};
+  submit_text_btn: string = 'Continue';
   constructor(private service: LoginService, private router: Router) {}
 
   validateForm() {
@@ -56,11 +57,13 @@ export class LoginComponent {
             this.router.navigateByUrl('/');
           },
           (error: any) => {
+            this.submit_text_btn = 'Continue';
             this.login_error = error.error;
+          },
+          () => {
+            this.submit_text_btn = 'Sending ...';
           }
         );
-    } else {
-      return;
     }
   }
 }

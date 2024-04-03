@@ -30,7 +30,9 @@
       {{ login_error }}
     </p>
 
-    <button (click)="login($event)" class="button submit">Continue</button>
+    <button (click)="login($event)" class="button submit">
+      {{ submit_text_btn }}
+    </button>
   </form>
 
   <a routerLink="/register" class="button">Create an account</a>
