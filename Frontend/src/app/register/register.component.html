@@ -1,7 +1,7 @@
 <app-navbar />
 <section class="register_container">
   <h1>Register</h1>
-  <form action="{{ register }}" id="register_form">
+  <form id="register_form">
     <div>
       <label for="username">Username*</label>
       <input
@@ -21,7 +21,7 @@
         name="email"
         id="email"
         type="email"
-        autocomplete="false"
+        autocomplete="off"
       />
       <p *ngIf="errors.email" class="error">{{ errors.email }}</p>
     </div>
@@ -33,7 +33,7 @@
         name="password"
         id="password"
         type="password"
-        autocomplete="false"
+        autocomplete="off"
       />
       <p *ngIf="errors.password" class="error">{{ errors.password }}</p>
     </div>
