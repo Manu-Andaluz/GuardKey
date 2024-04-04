@@ -5,6 +5,7 @@
   text-align: center;
   height: calc(100vh - 75px);
   gap: 20px;
+  animation: fadeIn 500ms ease;
 
   h1 {
     font-size: 32px;

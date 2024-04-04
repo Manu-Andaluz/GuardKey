@@ -6,6 +6,7 @@
   height: 70px;
   align-items: center;
   border-bottom: 1px solid $primary-border;
+  animation: fadeIn 500ms ease;
 
   nav {
     display: flex;
