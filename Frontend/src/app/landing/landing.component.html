@@ -27,7 +27,7 @@
       </svg>
     </a>
 
-    <a *ngIf="!isUser" class="button outlined">
+    <a *ngIf="!isUser" class="button blocked">
       Create new entry
       <svg
         width="24"
@@ -100,9 +100,13 @@
     />
 
     <h4 *ngIf="entries.length === 0 && isUser === false">
+      <img src="../../assets/sign_in.svg" alt="Sign In" />
       Sign in and to see your entries ...
     </h4>
 
-    <h4 *ngIf="isUser && entries.length === 0">You don't have any entries</h4>
+    <h4 *ngIf="isUser && entries.length === 0">
+      <img src="../../assets/no_data.svg" alt="Sign In" />
+      You don't have any entries
+    </h4>
   </ul>
 </section>

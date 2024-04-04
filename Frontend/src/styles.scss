@@ -65,6 +65,16 @@
       background-color: $secondary-color;
     }
   }
+
+  &.blocked {
+    transition: background 300ms ease;
+    border: 1px solid $primary-border;
+    background-color: gray;
+    cursor: not-allowed;
+
+    &:hover {
+    }
+  }
 }
 
 /* modal */
