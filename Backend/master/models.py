@@ -5,7 +5,6 @@ import random
 import string
 from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Hash import SHA512
-from Crypto.Random import get_random_bytes
 from .utils import encrypt,decrypt
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -39,13 +38,13 @@ class Secrets(models.Model):
 
         return password
 
-    def generate_device_secret(self, length=10):
-        return ''.join(random.choices(string.ascii_uppercase + string.digits, k = length))
+    def generate_device_secret(self, length=10, user_id=""):
+        user = User.objects.get(id=user_id)
+        return ''.join(random.choices(string.ascii_uppercase + string.digits + str(user.password), k = length))
 
     def set_masterkey(self,password, user_id):
         try:
             user = User.objects.get(id=user_id)
-            print(user)
         except User.DoesNotExist:
            return False
 
@@ -57,19 +56,22 @@ class Secrets(models.Model):
         user_profile.onboarding = False
         user_profile.save()
         self.user = user
-        self.masterkey_hash = hashlib.sha256(password.encode()).hexdigest()
-        self.device_secret = self.generate_device_secret()
+        self.device_secret = self.generate_device_secret(user_id=user_id)
+        salt = str(user_id) + self.device_secret
+        self.masterkey_hash = hashlib.sha256(password.encode() + salt.encode()).hexdigest()
         self.save()
         return True
 
     def validate_master_password(self,password, user_id):
         user = User.objects.get(id=user_id)
-        hashed_mp = hashlib.sha256(password.encode()).hexdigest()
         result = Secrets.objects.get(user=user)
+        salt = str(user_id) + result.device_secret
+        hashed_mp = hashlib.sha256(password.encode() + salt.encode()).hexdigest()
         if hashed_mp == result.masterkey_hash:
             return result
         else :
             return False
+
 
 class Entries(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='user_related', null=True)
