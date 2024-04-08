@@ -6,5 +6,6 @@ urlpatterns = [
     path("create-entry/", views.create_entry,name="create-entry"),
     path("retrieve-entries/", views.extract_entries, name="retrieve-entries"),
     path("generate-password/", views.generate_password, name="generate-password"),
+    path("edit-entry/", views.edit_entry, name="edit-entry"),
     path("delete-entry/",views.delete_entry, name="delete-entry")
 ]

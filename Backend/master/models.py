@@ -74,6 +74,7 @@ class Secrets(models.Model):
 
 
 class Entries(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='user_related', null=True)
     site_name = models.TextField(null=False)
     site_url = models.TextField(null=True)
@@ -125,6 +126,17 @@ class Entries(models.Model):
         decrypted_mk = decrypt(key=mk, source=data.password,keyType="bytes")
         data.password = decrypted_mk.decode()
         return [data]
+
+    def edit_entry_information(self, site_id, site_image):
+        entry = Entries.objects.get(id=site_id)             
+        if entry:
+            entry.site_image = site_image
+            entry.save()
+            return [entry]
+
+        else: 
+            return False
+        
     
     def delete_entry(self, search):
         data = Entries.objects.get(site_name=search)             

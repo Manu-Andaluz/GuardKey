@@ -77,6 +77,27 @@ def generate_password(request):
         return Response({'data': password})
 
 
+@api_view(['PATCH'])
+def edit_entry(request):
+    master_password = request.data["master_password"]
+    user_id = request.data["user_id"]
+    validate_password = Secrets().validate_master_password(master_password,user_id)
+
+    if validate_password:
+       site_image = request.data["site_image"]
+       site_id = request.data["site_id"]
+       response = Entries().edit_entry_information(site_image=site_image, site_id=site_id)
+
+       if response:
+            serialized_result = EntriesSerializer(response, many=True).data
+            return Response({'data': serialized_result})
+       else:
+            return Response({'message': 'Entry not found !!'}, status=status.HTTP_404_NOT_FOUND)
+
+    else:
+        return Response({'message': 'Wrong master password !!'}, status=status.HTTP_404_NOT_FOUND)
+    
+    
 
 @api_view(['DELETE'])
 def delete_entry(request):
