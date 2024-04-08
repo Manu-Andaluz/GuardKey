@@ -35,7 +35,11 @@ export class CardComponent {
       );
   }
 
-  async deleteEntry(search: string) {
+  async deleteEntry(search: string, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+
     if (!this.master_password) {
       await this.getModalValue(search);
     }
