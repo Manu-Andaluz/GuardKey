@@ -92,10 +92,8 @@ class Entries(models.Model):
     def add_entry(self, mp, ds, sitename, siteurl, siteimage, email, username, password, user_id):
         try:
             user = User.objects.get(id=user_id)
-            print(user)
         except User.DoesNotExist:
             # Handle the case where user does not exist
-            print('---------------------', user_id)
             return False
 
         mk = self.compute_master_key(mp,ds)
@@ -140,7 +138,6 @@ class Entries(models.Model):
     
     def delete_entry(self, search):
         data = Entries.objects.get(site_name=search)             
-        print('data: ', data)
         copied_data = data
         data.delete()
         return copied_data
