@@ -135,4 +135,18 @@ export class EntryComponent {
         }
       );
   }
+
+  copyClipboard(value_to_copy?: string, element_id?: string) {
+    // Copy the text inside the text field
+    if (value_to_copy && element_id) {
+      navigator.clipboard.writeText(value_to_copy);
+      // Alert the copied text
+      const tooltip = document.getElementById(element_id) as HTMLElement;
+      tooltip.innerText = `Copied !!`;
+
+      setTimeout(() => {
+        tooltip.innerText = `Copy`;
+      }, 2000);
+    }
+  }
 }
