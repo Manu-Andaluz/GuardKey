@@ -39,6 +39,11 @@
           word-break: break-all;
           position: relative;
           cursor: pointer;
+
+          white-space: nowrap; /* Prevent text from wrapping to the next line */
+          overflow: hidden; /* Hide content that overflows the container */
+          text-overflow: ellipsis;
+          max-width: 80vw;
         }
 
         span {
