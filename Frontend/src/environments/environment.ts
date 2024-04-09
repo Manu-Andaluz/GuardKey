@@ -1,3 +1,3 @@
 export const environment = {
-  apiPath: 'https://guardkey-production.up.railway.app',
+  apiPath: 'https://manuandaluz.pythonanywhere.com',
 };
