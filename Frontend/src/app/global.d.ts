@@ -1,5 +1,5 @@
 type Entry = {
-  id: string;
+  id: number;
   site_name: string;
   site_url: string;
   site_image: string;

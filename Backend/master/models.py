@@ -110,16 +110,16 @@ class Entries(models.Model):
 
     def retrieve_entries(self,search, user_id):
         user = User.objects.get(id=user_id)
-        if search == "" or search == None:
+        if  search == None:
             all_data = Entries.objects.filter(user=user)
             return all_data
         else:
-            data = Entries.objects.get(user=user,site_name=search)            
+            data = Entries.objects.get(user=user,id=search)            
             return [data]
     
     def decrypted_entry(self,mp,ds,search,user_id):
         user = User.objects.get(id=user_id)
-        data = Entries.objects.get(user=user,site_name=search)            
+        data = Entries.objects.get(user=user,id=search)            
         mk = self.compute_master_key(mp, ds)
         decrypted_mk = decrypt(key=mk, source=data.password,keyType="bytes")
         data.password = decrypted_mk.decode()
@@ -137,7 +137,7 @@ class Entries(models.Model):
         
     
     def delete_entry(self, search):
-        data = Entries.objects.get(site_name=search)             
+        data = Entries.objects.get(id=search)             
         copied_data = data
         data.delete()
         return copied_data
