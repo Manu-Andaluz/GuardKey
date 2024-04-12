@@ -21,7 +21,8 @@ export class EntryComponent {
   ) {}
   entry_id?: number;
   entry?: Entry;
-  private master_password?: string = undefined;
+  private master_password?: string =
+    sessionStorage.getItem('master_item') || undefined;
 
   async getEntry({
     search = this.entry_id,
@@ -96,6 +97,7 @@ export class EntryComponent {
           'entry_master_password'
         ) as any;
         this.master_password = master_password_input.value;
+        sessionStorage.setItem('master_item', master_password_input.value);
         resolve();
       };
 

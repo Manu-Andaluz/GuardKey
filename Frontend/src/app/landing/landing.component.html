@@ -74,7 +74,10 @@
 <section class="cards_container">
   <dialog id="card_modal" #card_modal class="dialog">
     <form action="">
-      <h2>Enter your master password to delete the selected entry:</h2>
+      <h2>
+        Enter your master password to confirm the deletion of the selected
+        entry:
+      </h2>
       <input
         type="password"
         placeholder="Master Password"
@@ -82,11 +85,11 @@
       />
 
       <div>
-        <button class="button outlined" (click)="closeModal($event, true)">
-          Cancel
-        </button>
         <button class="button submit" (click)="closeModal($event)">
           Continue
+        </button>
+        <button class="button outlined" (click)="closeModal($event, true)">
+          Cancel
         </button>
       </div>
     </form>
