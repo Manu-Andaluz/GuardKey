@@ -14,19 +14,26 @@ import { jwtDecode } from 'jwt-decode';
   styleUrl: './landing.component.scss',
 })
 export class LandingComponent {
-  constructor(private service: PostService, private router: Router) {}
+  constructor(
+    private service: PostService,
+    private router: Router,
+  ) {}
 
   entries: Entry[] = [];
   card_modal_entry?: Entry;
   isUser: Boolean = false;
   @ViewChild('card_modal') cardModal!: ElementRef;
 
-  testPost() {
+  getDecodedToken(): DecodedToken {
     const token = localStorage.getItem('guardkey_session_token') as string;
+    const decodedToken = jwtDecode(token) as any;
+    return decodedToken;
+  }
 
-    if (token) {
-      const decodedToken = jwtDecode(token) as any;
+  testPost() {
+    const decodedToken = this.getDecodedToken();
 
+    if (decodedToken.username) {
       this.service
         .examplePost({
           decrypt_password: false,
@@ -38,17 +45,17 @@ export class LandingComponent {
           },
           (error: any) => {
             console.log(error);
-          }
+          },
         );
     }
   }
 
   ngOnInit(): void {
     this.testPost(); // Call testPost() when the component is initialized
-    const token = localStorage.getItem('guardkey_session_token') as string;
-    if (token) {
+    const decodedToken = this.getDecodedToken();
+
+    if (decodedToken.username) {
       this.isUser = true;
-      const decodedToken = jwtDecode(token) as any;
       if (decodedToken.onboarding === true) {
         this.router.navigateByUrl('/onboarding');
       }
@@ -69,7 +76,7 @@ export class LandingComponent {
     event.preventDefault();
     const modalElement = this.cardModal.nativeElement as HTMLDialogElement;
     modalElement.classList.add('close');
-    const animationEndHandler = (event: any) => {
+    const animationEndHandler = () => {
       modalElement.close();
       modalElement.classList.remove('close');
       modalElement.removeEventListener('animationend', animationEndHandler);

@@ -16,13 +16,13 @@ export class OnboardingComponent {
   constructor(
     private service: MasterPasswordService,
     private refresh_service: RefreshTokenService,
-    private router: Router
+    private router: Router,
   ) {}
 
   setMasterPassword(e: Event) {
     e.preventDefault();
     const input = document.getElementById(
-      'master_password'
+      'master_password',
     ) as HTMLInputElement;
 
     const token = localStorage.getItem('guardkey_session_token') as string;
@@ -38,7 +38,7 @@ export class OnboardingComponent {
         },
         (error: any) => {
           console.log(error);
-        }
+        },
       );
     }
   }

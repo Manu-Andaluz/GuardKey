@@ -17,12 +17,18 @@ export class EntryComponent {
   constructor(
     private service: EntryDetailsService,
     private route: ActivatedRoute,
-    private edit: EditEntryService
+    private edit: EditEntryService,
   ) {}
   entry_id?: number;
   entry?: Entry;
   private master_password?: string =
     sessionStorage.getItem('master_item') || undefined;
+
+  getDecodedToken(): DecodedToken {
+    const token = localStorage.getItem('guardkey_session_token') as string;
+    const decodedToken = jwtDecode(token) as any;
+    return decodedToken;
+  }
 
   async getEntry({
     search = this.entry_id,
@@ -31,14 +37,12 @@ export class EntryComponent {
     search?: number | undefined;
     fromModal?: boolean;
   }) {
-    const token = localStorage.getItem('guardkey_session_token') as string;
+    const decodedToken = this.getDecodedToken();
 
-    if (token) {
+    if (decodedToken.username) {
       if (fromModal && !this.master_password) {
         await this.getModalValue();
       }
-
-      const decodedToken = jwtDecode(token) as any;
 
       if (search) {
         this.service
@@ -53,7 +57,7 @@ export class EntryComponent {
             },
             (error: any) => {
               console.log(error);
-            }
+            },
           );
       }
     }
@@ -69,7 +73,7 @@ export class EntryComponent {
   closeModal = (event: Event): void => {
     event.preventDefault();
     const modalElement = document.getElementById(
-      'entry_password_modal'
+      'entry_password_modal',
     ) as HTMLDialogElement;
     modalElement.classList.add('close');
     const animationEndHandler = (event: any) => {
@@ -86,7 +90,7 @@ export class EntryComponent {
 
   getModalValue() {
     const dialog = document.getElementById(
-      'entry_password_modal'
+      'entry_password_modal',
     ) as HTMLDialogElement;
 
     return new Promise<void>((resolve) => {
@@ -94,7 +98,7 @@ export class EntryComponent {
         dialog.removeEventListener('close', closeHandler);
 
         const master_password_input = document.getElementById(
-          'entry_master_password'
+          'entry_master_password',
         ) as any;
         this.master_password = master_password_input.value;
         sessionStorage.setItem('master_item', master_password_input.value);
@@ -108,7 +112,7 @@ export class EntryComponent {
 
   showInput() {
     const image_input = document.getElementById(
-      'hiiden_div'
+      'hiiden_div',
     ) as HTMLInputElement;
     image_input.style.display = 'flex';
   }
@@ -117,16 +121,15 @@ export class EntryComponent {
     if (!this.master_password) {
       await this.getModalValue();
     }
-    const token = localStorage.getItem('guardkey_session_token') as string;
+    const decodedToken = this.getDecodedToken();
     const input = document.getElementById(
-      'input_site_image'
+      'input_site_image',
     ) as HTMLInputElement;
-    const decodedToken = jwtDecode(token) as any;
 
     this.edit
       .postRequest({
         master_password: this.master_password || '',
-        user_id: decodedToken.user_id || '',
+        user_id: decodedToken.user_id,
         site_image: input.value,
         site_id: Number(this.entry?.id) || 0,
       })
@@ -136,7 +139,7 @@ export class EntryComponent {
         },
         (error: any) => {
           console.log(error);
-        }
+        },
       );
   }
 

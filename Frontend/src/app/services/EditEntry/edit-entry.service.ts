@@ -15,7 +15,7 @@ export class EditEntryService {
 
   postRequest(body: {
     master_password: string;
-    user_id: string;
+    user_id: number;
     site_image: string;
     site_id: number;
   }) {

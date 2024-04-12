@@ -1,3 +1,13 @@
+type DecodedToken = {
+  exp: number;
+  iat: number;
+  jti: string;
+  onboarding: boolean;
+  token_type: string;
+  user_id: number;
+  username: string;
+};
+
 type Entry = {
   id: number;
   site_name: string;
