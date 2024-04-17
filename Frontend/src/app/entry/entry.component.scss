@@ -4,6 +4,8 @@
   min-height: calc(100vh - 75px);
   padding: 40px;
   animation: fadeIn 500ms ease;
+  max-width: 1500px;
+  margin: auto;
 
   div {
     max-width: 100%;
