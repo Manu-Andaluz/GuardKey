@@ -21,7 +21,7 @@
         name="email"
         id="email"
         type="email"
-        autocomplete="off"
+        required
       />
       <p *ngIf="errors.email" class="error">{{ errors.email }}</p>
     </div>
@@ -42,8 +42,16 @@
       {{ register_error }}
     </p>
 
-    <button class="button alternative" (click)="register($event)">
+    <button
+      class="button alternative"
+      (click)="register($event)"
+      *ngIf="!is_submiting"
+    >
       Continue
+    </button>
+
+    <button class="button alternative" disabled *ngIf="is_submiting">
+      Submiting ...
     </button>
   </form>
 

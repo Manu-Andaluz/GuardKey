@@ -29,9 +29,16 @@
     <p *ngIf="login_error" class="error" style="margin: auto">
       {{ login_error }}
     </p>
+    <button
+      class="button alternative"
+      (click)="login($event)"
+      *ngIf="!is_submiting"
+    >
+      Continue
+    </button>
 
-    <button (click)="login($event)" class="button alternative">
-      {{ submit_text_btn }}
+    <button class="button alternative" disabled *ngIf="is_submiting">
+      Submiting ...
     </button>
   </form>
 

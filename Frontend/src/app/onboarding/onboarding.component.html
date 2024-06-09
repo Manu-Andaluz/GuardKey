@@ -10,8 +10,15 @@
       name="master_password"
       id="master_password"
     />
+    <button class="button submit" disabled *ngIf="is_submiting">
+      Creating ...
+    </button>
 
-    <button class="button submit" (click)="setMasterPassword($event)">
+    <button
+      class="button submit"
+      (click)="setMasterPassword($event)"
+      *ngIf="!is_submiting"
+    >
       Continue
     </button>
   </form>

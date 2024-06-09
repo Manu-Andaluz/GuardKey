@@ -13,7 +13,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './create-password.component.scss',
 })
 export class CreatePasswordComponent {
-  constructor(private service: AddEntryService, private router: Router) {}
+  is_submiting: boolean = false;
+
+  constructor(
+    private service: AddEntryService,
+    private router: Router,
+  ) {}
 
   master_password_error?: string;
   errors: FormErrors = {
@@ -46,12 +51,14 @@ export class CreatePasswordComponent {
   }
 
   getFormData(event: Event) {
+    this.is_submiting = true;
     event.preventDefault();
     const form = document.getElementById('add_entry') as HTMLFormElement;
     const errors = this.validateForm(form);
 
     if (Object.keys(errors).length > 0) {
       this.errors = errors;
+      this.is_submiting = false;
       return;
     }
 
@@ -70,9 +77,10 @@ export class CreatePasswordComponent {
         this.router.navigateByUrl('/');
       },
       (error: any) => {
+        this.is_submiting = false;
         console.log(error);
         this.master_password_error = error.error;
-      }
+      },
     );
   }
 }

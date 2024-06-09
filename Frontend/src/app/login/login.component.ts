@@ -17,8 +17,12 @@ export class LoginComponent {
     username?: string;
     password?: string;
   } = {};
-  submit_text_btn: string = 'Continue';
-  constructor(private service: LoginService, private router: Router) {}
+  is_submiting: boolean = false;
+
+  constructor(
+    private service: LoginService,
+    private router: Router,
+  ) {}
 
   validateForm() {
     const form = document.getElementById('login_form') as HTMLFormElement;
@@ -38,6 +42,8 @@ export class LoginComponent {
   }
 
   login(event?: Event) {
+    this.is_submiting = true;
+
     if (event) {
       event.preventDefault();
     }
@@ -55,13 +61,13 @@ export class LoginComponent {
             this.router.navigateByUrl('/');
           },
           (error: any) => {
-            this.submit_text_btn = 'Continue';
+            this.is_submiting = false;
             this.login_error = error.error;
           },
-          () => {
-            this.submit_text_btn = 'Sending ...';
-          }
         );
+    } else {
+      this.is_submiting = false;
+      return;
     }
   }
 }

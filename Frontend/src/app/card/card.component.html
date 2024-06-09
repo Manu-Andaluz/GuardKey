@@ -1,5 +1,12 @@
 <li class="card" routerLink="/entry/{{ entry_id }}">
-  <img src="{{ image_link }}" alt="Website Image" />
+  <img
+    [src]="
+      image_link
+        ? image_link
+        : 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F114-1149847_avatar-unknown-dp.png&f=1&nofb=1&ipt=d26efe21651011d16a9af0d30526501c6e0fd6d244ee04173d2fc8b136c29fb4&ipo=images'
+    "
+    alt="Website Image"
+  />
 
   <div class="card_info">
     <h4>{{ website_name }}</h4>

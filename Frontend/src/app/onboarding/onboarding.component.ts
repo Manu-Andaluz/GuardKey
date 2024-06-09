@@ -4,15 +4,18 @@ import { MasterPasswordService } from '../services/MasterPassword/master-passwor
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { RefreshTokenService } from '../services/RefreshToken/refresh-token.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-onboarding',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, CommonModule],
   templateUrl: './onboarding.component.html',
   styleUrl: './onboarding.component.scss',
 })
 export class OnboardingComponent {
+  is_submiting: boolean = false;
+
   constructor(
     private service: MasterPasswordService,
     private refresh_service: RefreshTokenService,
@@ -20,6 +23,7 @@ export class OnboardingComponent {
   ) {}
 
   setMasterPassword(e: Event) {
+    this.is_submiting = true;
     e.preventDefault();
     const input = document.getElementById(
       'master_password',
@@ -37,6 +41,7 @@ export class OnboardingComponent {
           });
         },
         (error: any) => {
+          this.is_submiting = false;
           console.log(error);
         },
       );
